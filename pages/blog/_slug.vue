@@ -139,7 +139,7 @@ article {
   height: 453px;
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center;
+  background-position: top;
 }
 
 .article__content {

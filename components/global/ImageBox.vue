@@ -36,6 +36,7 @@ figure {
 }
 img {
   width: 100%;
+  border-radius: 4px;
 }
 figcaption {
   font-size: 12px;

@@ -105,7 +105,7 @@ export default {
   border-radius: 6px 6px 0 0;
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center;
+  background-position: top;
 }
 .card__body {
   padding: 10px;
