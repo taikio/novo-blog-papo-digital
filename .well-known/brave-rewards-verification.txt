@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: papodigital.net.br
+Token: 6f63d2db327ae0cd8350ea248c779a66fdcec221df853f65d22ea3a1395cf58d
