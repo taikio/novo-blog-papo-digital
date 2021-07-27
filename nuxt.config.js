@@ -13,6 +13,7 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Aqui você encontra artigos sobre mundo tech, programação e carreira' },
       { name: 'format-detection', content: 'telephone=no' },
+      { name: 'robots', content: 'index, follow' },
 
       // General social media meta tags
       { property: "og:site_name", content: "Papo Digital" },
@@ -20,7 +21,7 @@ export default {
       {
         hid: "og:url",
         property: "og:url",
-        content: "https://meu-domínio-aqui",
+        content: "https://www.papodigital.net.br",
       },
       {
         hid: "og:title",
@@ -46,7 +47,7 @@ export default {
       {
         hid: "twitter:url",
         name: "twitter:url",
-        content: "https://meu-dominio-aqui",
+        content: "https://www.papodigital.net.br",
       },
       {
         hid: "twitter:title",
@@ -66,7 +67,7 @@ export default {
     ],
     link: [
       // https://moz.com/learn/seo/canonicalization
-      { hid: "canonical", rel: "canonical", href: "https://bobross.com" },
+      { hid: "canonical", rel: "canonical", href: "https://www.papodigital.net.br" },
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css' },
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },

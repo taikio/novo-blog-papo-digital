@@ -65,6 +65,11 @@ export default {
         },
         { property: "og:image:width", content: "740" },
         { property: "og:image:height", content: "300" },
+        {
+          hid: "og:url",
+          property: "og:url",
+          content: `https://www.papodigital.net.br/${this.$route.params.slug}`
+        },
 
         // Twitter card meta tags
         {
@@ -82,6 +87,12 @@ export default {
           name: "twitter:image",
           content: this.coverImage,
         },
+        {
+          hid: "twitter:url",
+          name: "twitter:url",
+          content: `https://www.papodigital.net.br/${this.$route.params.slug}`
+        },
+
         // Aditional article meta tags
         {
           property: "article:published_time",
@@ -107,7 +118,7 @@ export default {
         {
           hid: "canonical",
           rel: "canonical",
-          href: `https://meu-dominio/${this.$route.params.slug}`,
+          href: `https://www.papodigital.net.br/${this.$route.params.slug}`,
         },
       ],
     }
@@ -163,14 +174,14 @@ article {
 
 .nuxt-content h2 {
   font-weight: bold;
-  font-size: 28px;
+  font-size: 1.3rem;
 }
 .nuxt-content h3 {
   font-weight: bold;
-  font-size: 22px;
+  font-size: 1.2rem;
 }
 .nuxt-content p {
-  font-size: 18px;
+  font-size: 1.1rem;
   color: rgba(0, 0, 0, 0.75);
   margin-bottom: 20px;
 }
