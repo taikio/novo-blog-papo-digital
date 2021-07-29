@@ -44,6 +44,7 @@ export default {
   },
   head() {
     return {
+      title: `Papo Digital | ${this.article.title}`,
       meta: [
         { hid: 'description', name: 'description', content: this.article.description },
 

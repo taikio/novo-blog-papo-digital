@@ -4,14 +4,14 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Papo Digital - Blog',
+    title: 'Blog Papo Digital',
     htmlAttrs: {
       lang: 'en'
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Aqui você encontra artigos sobre mundo tech, programação e carreira' },
+      { hid: 'description', name: 'description', content: 'O Papo Digital é um blog que fala sobre mundo tech, programação e carreira' },
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'robots', content: 'index, follow' },
 
@@ -26,12 +26,12 @@ export default {
       {
         hid: "og:title",
         property: "og:title",
-        content: "Papo Digital - Blog",
+        content: "Blog Papo Digital",
       },
       {
         hid: "og:description",
         property: "og:description",
-        content: "Aqui você encontra artigos sobre mundo tech, programação e carreira",
+        content: "O Papo Digital é um blog que fala sobre mundo tech, programação e carreira",
       },
       {
         hid: "og:image",
@@ -52,12 +52,12 @@ export default {
       {
         hid: "twitter:title",
         name: "twitter:title",
-        content: "Papo Digital - Blog",
+        content: "Blog Papo Digital",
       },
       {
         hid: "twitter:description",
         name: "twitter:description",
-        content: "Aqui você encontra artigos sobre mundo tech, programação e carreira",
+        content: "O Papo Digital é um blog que fala sobre mundo tech, programação e carreira",
       },
       {
         hid: "twitter:image",
@@ -98,6 +98,8 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
+    // https://sitemap.nuxtjs.org/guide/setup
+    '@nuxtjs/sitemap'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -110,6 +112,15 @@ export default {
         theme: 'prism-themes/themes/prism-material-oceanic.css'
       }
     }
+  },
+  sitemap: {
+    hostname: 'https://www.papodigital.net.br',
+    gzip: true,
+    routes: [
+      '/blog/criando-documentos-pdf-com-reactjs',
+      '/blog/produtividade-vscode-com-snippets',
+      '/blog/introducao-ao-nuxtjs'
+    ]
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
