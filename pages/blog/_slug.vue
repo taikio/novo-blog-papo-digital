@@ -185,6 +185,7 @@ article {
   font-size: 1.1rem;
   color: rgba(0, 0, 0, 0.75);
   margin-bottom: 20px;
+  line-height: 1.4rem;
 }
 .nuxt-content p code {
   font-weight: 600;

@@ -20,16 +20,14 @@ export default {
       }
       return ''
     }
-  },
-  created() {
-    console.log('image-box', this.imageName)
-  },
+  }
 }
 </script>
 
 <style scoped>
 figure {
   width: 100%;
+  border: 1px solid #dadada;
   border-radius: 4px;
   padding: 0;
   margin: 0;
