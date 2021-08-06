@@ -18,9 +18,7 @@
       <prev-next :prev="prev" :next="next" />
 
       <div class="article__comments">
-        <Disqus
-          :page-config="disqusConfig"
-        />
+        <Disqus />
       </div>
     </div>
   </article>
