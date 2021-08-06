@@ -17,7 +17,8 @@
     "@nuxtjs/sitemap": "^2.4.0",
     "core-js": "^3.15.1",
     "nuxt": "^2.15.7",
-    "prism-themes": "^1.7.0"
+    "prism-themes": "^1.7.0",
+    "vue-disqus": "^4.0.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.14.7",

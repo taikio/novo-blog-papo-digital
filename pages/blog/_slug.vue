@@ -16,18 +16,29 @@
       <nuxt-content :document="article" />
 
       <prev-next :prev="prev" :next="next" />
+
+      <div class="article__comments">
+        <discus-plugin shortname="papodigital" :page-config="disqusConfig" />
+      </div>
     </div>
   </article>
 </template>
 
 <script>
 import PrevNext from '@/components/PrevNext.vue'
+import { Disqus } from 'vue-disqus'
 
 export default {
-  components: { PrevNext },
+  components: { PrevNext, 'discus-plugin': Disqus },
   async asyncData({ $content, params }) {
     const article = await $content('articles', params.slug).fetch()
     const coverImage = require(`~/assets/images/${article.img}`)
+    const disqusConfig = {
+      url: `https://papodigital.net.br/blog/${params.slug}`,
+      identifier: `/blog/${params.slug}`,
+      title: article.title,
+      slug: params.slug
+    }
 
     const [prev, next] = await $content('articles')
       .only(['title', 'slug'])
@@ -39,7 +50,8 @@ export default {
       article,
       coverImage,
       prev,
-      next
+      next,
+      disqusConfig
     }
   },
   head() {
@@ -171,6 +183,11 @@ article {
   margin: 16px 0;
   font-size: 14px;
   color: rgba(0, 0, 0, 0.60);
+}
+
+.article__comments {
+  width: 100%;
+  margin-top: 16px;
 }
 
 .nuxt-content h2 {
