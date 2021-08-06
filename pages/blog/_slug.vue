@@ -18,7 +18,9 @@
       <prev-next :prev="prev" :next="next" />
 
       <div class="article__comments">
-        <discus-plugin shortname="papodigital" :page-config="disqusConfig" />
+        <Disqus
+          :page-config="disqusConfig"
+        />
       </div>
     </div>
   </article>
@@ -26,17 +28,15 @@
 
 <script>
 import PrevNext from '@/components/PrevNext.vue'
-import { Disqus } from 'vue-disqus'
 
 export default {
-  components: { PrevNext, 'discus-plugin': Disqus },
+  components: { PrevNext },
   async asyncData({ $content, params }) {
     const article = await $content('articles', params.slug).fetch()
     const coverImage = require(`~/assets/images/${article.img}`)
     const disqusConfig = {
-      url: `www.papodigital.net.br/blog/${params.slug}`,
-      // url: `localhost:3000/blog/${params.slug}`,
-      identifier: `/blog/${params.slug}`,
+      url: `https://www.papodigital.net.br/blog/${params.slug}`,
+      identifier: `papodigital-${article.slug}`,
       title: article.title,
       slug: params.slug
     }
