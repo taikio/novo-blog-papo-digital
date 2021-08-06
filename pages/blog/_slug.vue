@@ -34,7 +34,8 @@ export default {
     const article = await $content('articles', params.slug).fetch()
     const coverImage = require(`~/assets/images/${article.img}`)
     const disqusConfig = {
-      url: `https://papodigital.net.br/blog/${params.slug}`,
+      url: `www.papodigital.net.br/blog/${params.slug}`,
+      // url: `localhost:3000/blog/${params.slug}`,
       identifier: `/blog/${params.slug}`,
       title: article.title,
       slug: params.slug
