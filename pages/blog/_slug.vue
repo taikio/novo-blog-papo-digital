@@ -3,7 +3,7 @@
     <div class="article__cover" :style="{ backgroundImage: `url(${coverImage})` }" />
     <div class="article__content">
       <h1 class="article__title">{{ article.title }}</h1>
-      <p class="article__publish">Data de Publicação: {{ formatDate(article.createdAt) }}</p>
+      <p class="article__publish">Data de Publicação: {{ formatDate(article.publishDate) }}</p>
       <!-- exemplo de table of contents -->
       <!-- <nav>
         <ul>
@@ -41,7 +41,7 @@ export default {
 
     const [prev, next] = await $content('articles')
       .only(['title', 'slug'])
-      .sortBy('createdAt', 'asc')
+      .sortBy('publishDate', 'asc')
       .surround(params.slug)
       .fetch()
 
