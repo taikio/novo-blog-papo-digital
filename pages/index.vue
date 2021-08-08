@@ -12,7 +12,7 @@
         </div>
 
         <div class="card__footer">
-          {{ formatDate(article.createdAt) }}
+          {{ formatDate(article.publishDate) }}
         </div>
       </div>
     </div>
@@ -23,8 +23,8 @@
 export default {
   async asyncData({ $content, params }) {
     const articles = await $content('articles')
-      .only(['title', 'description', 'img', 'slug', 'createdAt'])
-      .sortBy('createdAt', 'desc')
+      .only(['title', 'description', 'img', 'slug', 'publishDate'])
+      .sortBy('publishDate', 'desc')
       .fetch()
 
     return {
