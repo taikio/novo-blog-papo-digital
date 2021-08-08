@@ -3,6 +3,7 @@ title: Construindo componentes altamente reutilizáveis com Vue Slots
 description: Como a própria documentação do Vuejs já diz, Slot é um recurso que nos permite inserir elementos dentro de um componente. Desta forma é possível criar um componente mais genérico e reutilizá-lo várias vezes dentro da aplicação mudando seu conteúdo interno.
 img: cover-vue-slots.png
 alt: vuejs slots
+publishDate: 2021-08-05T19:30:00.003Z
 ---
 
 Como a própria documentação do Vuejs já diz, Slot é um recurso que nos permite inserir elementos dentro de um componente. Desta forma é possível criar um componente mais genérico e reutilizá-lo várias vezes dentro da aplicação mudando seu conteúdo interno.

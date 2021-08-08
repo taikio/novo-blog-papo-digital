@@ -3,6 +3,7 @@ title: Introdução ao NuxtJS - Conheça este incrível Framework
 description: Se você gosta de utilizar Vuejs em seus projetos e ainda fica gastando tempo e esforço configurando a base do projeto, como roteamento e vuex store está na hora de conhecer o Nuxtjs. Este framework te entrega roteamento, vuex store, SSR, hot reloading e ainda conta com uma série de módulos que podem aumentar ainda mais o leque de recursos disponíveis.
 img: cover-introducao-nuxt.png
 alt: introdução nuxtjs
+publishDate: 2021-07-25T19:30:00.003Z
 ---
 
 Se você gosta de utilizar Vuejs em seus projetos e ainda fica gastando tempo e esforço configurando a base do projeto, como roteamento e vuex store está na hora de conhecer o Nuxtjs. Este framework te entrega roteamento, vuex store, SSR, hot reloading e ainda conta com uma série de módulos que podem aumentar ainda mais o leque de recursos disponíveis.

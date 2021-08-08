@@ -53,7 +53,7 @@ export default {
 }
 
 .link {
-  font-size: 18px;
+  font-size: 16px;
   text-decoration: none;
   outline: none;
   color: #3B97D3;

@@ -3,6 +3,7 @@ title: Aumente sua Produtividade no VSCode com Snippets
 description: Se você é um programador "preguiçoso" como eu também já deve estar cansado de ficar sempre digitando a mesma coisa toda vez que for criar uma nova classe ou componente. Neste artigo eu vou mostrar como é possível automatizar esta tarefa utilizando o recurso de Snippets do VSCode.
 img: cover-vscode-snippets.png
 alt: vscode snippets
+publishDate: 2021-07-15T19:30:00.003Z
 ---
 
 Se você é um programador "preguiçoso" como eu também já deve estar cansado de ficar sempre digitando a mesma coisa
