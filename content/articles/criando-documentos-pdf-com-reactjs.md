@@ -4,6 +4,7 @@ description: Em aplicações empresariais é muito comum a necessidade de criar 
 img: cover-post-pdf.png
 alt: Documentos PDF com ReactJS
 publishDate: 2021-07-10T19:30:00.003Z
+tag: ReactJS
 ---
 
 Em aplicações empresariais é muito comum a necessidade de criar documentos em PDF, seja para exibir dados de um relatório ou mesmo para exportar informações exibidas em tela. Neste artigo irei mostrar como criar documentos PDF utilizando React e a biblioteca PdfMake.

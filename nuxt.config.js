@@ -83,6 +83,12 @@ export default {
   plugins: [
     '@/plugins/disqus'
   ],
+  /*
+   ** Customize the progress-bar color
+   */
+   loading: {
+    color: '#3B97D3',
+  },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

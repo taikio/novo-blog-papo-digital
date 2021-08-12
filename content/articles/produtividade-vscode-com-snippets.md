@@ -4,6 +4,7 @@ description: Se você é um programador "preguiçoso" como eu também já deve e
 img: cover-vscode-snippets.png
 alt: vscode snippets
 publishDate: 2021-07-15T19:30:00.003Z
+tag: Produtividade
 ---
 
 Se você é um programador "preguiçoso" como eu também já deve estar cansado de ficar sempre digitando a mesma coisa

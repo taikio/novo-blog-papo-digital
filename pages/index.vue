@@ -2,6 +2,22 @@
   <div class="page">
     <div class="page__banner" />
 
+    <div class="page__tags">
+      <span class="tag" :class="{'tag--active': !activeTag}" @click="fetchAllArticles()">
+        #Todos
+      </span>
+
+      <span
+        v-for="tag in tagsList"
+        :key="tag"
+        class="tag"
+        :class="{'tag--active': activeTag === tag}"
+        @click="fetchArticlesByTag(tag)"
+      >
+        {{ `#${tag}` }}
+      </span>
+    </div>
+
     <div class="page__content">
       <div v-for="article of articles" :key="article.slug" class="card" @click="goToArticle(article)">
         <div class="card__image" :style="{ backgroundImage: getCardImage(article) }" />
@@ -12,7 +28,11 @@
         </div>
 
         <div class="card__footer">
-          {{ formatDate(article.publishDate) }}
+          <span class="card__publish-date">{{ formatDate(article.publishDate) }}</span>
+
+          <span class="card__tag">
+            {{ article.tag }}
+          </span>
         </div>
       </div>
     </div>
@@ -23,12 +43,17 @@
 export default {
   async asyncData({ $content, params }) {
     const articles = await $content('articles')
-      .only(['title', 'description', 'img', 'slug', 'publishDate'])
+      .only(['title', 'description', 'img', 'slug', 'publishDate', 'tag'])
       .sortBy('publishDate', 'desc')
       .fetch()
 
+    const tagsList = articles.map(a => a.tag).sort()
+    const activeTag = ''
+
     return {
       articles,
+      tagsList,
+      activeTag
     }
   },
   methods: {
@@ -53,6 +78,23 @@ export default {
         return new Date(date).toLocaleDateString('pt', options)
       }
       return new Date().toLocaleDateString('pt', options)
+    },
+    async fetchArticlesByTag(searchTag) {
+      this.articles = await this.$content('articles')
+      .only(['title', 'description', 'img', 'slug', 'publishDate', 'tag'])
+      .where({ tag: searchTag })
+      .sortBy('publishDate', 'desc')
+      .fetch()
+
+      this.activeTag = searchTag
+    },
+    async fetchAllArticles() {
+      this.articles = await this.$content('articles')
+      .only(['title', 'description', 'img', 'slug', 'publishDate', 'tag'])
+      .sortBy('publishDate', 'desc')
+      .fetch()
+
+      this.activeTag = ''
     }
   }
 }
@@ -67,11 +109,39 @@ export default {
 
 .page__banner {
   width: 100%;
-  height: 48vh;
+  height: 44vh;
   background: url('~assets/images/Banner_home.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+}
+
+.page__tags {
+  width: 94%;
+  display: flex;
+  flex-direction: row;
+  padding: 20px 24px 0 24px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 12px 16px;
+  font-size: 1rem;
+  border-radius: 6px;
+  background: #3B97D3;
+  color: #fff;
+  transition: 0.3s ease-in-out;
+  margin: 8px 8px 8px 0;
+}
+.tag:hover {
+  background: #52BA9B;
+  color: #fafafa;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+.tag--active {
+  background: #52BA9B;
+  color: #fafafa;
 }
 
 .page__content {
@@ -119,11 +189,27 @@ export default {
   bottom: 10px;
   font-size: 12px;
   color: rgba(0, 0, 0, 0.70);
+  width: 95%;
+  display: flex;
+  justify-content: space-between;
+}
+.card__publish-date {
+  margin-top: 4px;
+}
+.card__tag {
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  border-radius: 6px;
+  background: #3B97D3;
+  color: #fff;
 }
 
 @media screen and (min-width: 1441px) and (max-width: 1930px) {
   .card {
     width: 580px;
+  }
+  .tag {
+    margin: 6px 0;
   }
   .card__body h2 {
     font-size: 20px;
@@ -136,6 +222,11 @@ export default {
 @media screen and (min-width: 1025px) and (max-width: 1440px) {
   .page__banner {
     height: 42vh;
+  }
+  .tag {
+    margin: 6px;
+    padding: 12px 16px;
+    font-size: 1rem;
   }
   .card {
     width: 422px;
@@ -152,6 +243,11 @@ export default {
   .page__banner {
     height: 37vh;
   }
+  .tag {
+    margin: 6px;
+    padding: 8px 16px;
+    font-size: 1rem;
+  }
   .card {
     width: 284px;
   }
@@ -166,6 +262,11 @@ export default {
 @media screen and (min-width: 426px) and (max-width: 768px) {
   .page__banner {
     height: 37vh;
+  }
+  .tag {
+    margin: 4px;
+    padding: 7px 14px;
+    font-size: 1rem;
   }
   .page__content {
     grid-template-columns: 1fr 1fr;
@@ -184,6 +285,14 @@ export default {
 @media screen and (max-width: 425px) {
   .page__banner {
     height: 30vh;
+  }
+  .page__tags {
+    width: 89%;
+  }
+  .tag {
+    margin: 4px;
+    padding: 6px 12px;
+    font-size: 1rem;
   }
   .page__content {
     grid-template-columns: 1fr;

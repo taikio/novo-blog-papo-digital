@@ -175,7 +175,7 @@ article {
 .article__title {
   margin: 0;
   padding: 0;
-  font-size: 30px;
+  font-size: 1.5rem;
 }
 .article__publish {
   padding: 0;
@@ -189,6 +189,10 @@ article {
   margin-top: 16px;
 }
 
+.nuxt-content h1 {
+  font-weight: bold;
+  font-size: 1.4rem;
+}
 .nuxt-content h2 {
   font-weight: bold;
   font-size: 1.3rem;
@@ -244,7 +248,7 @@ pre[class*="language-"] {
     margin-left: 5px;
     margin-right: 5px;
   }
-  .article__title {
+  /* .article__title {
     margin: 0;
     padding: 0;
     font-size: 18px;
@@ -256,16 +260,16 @@ pre[class*="language-"] {
   .nuxt-content h3 {
     font-weight: bold;
     font-size: 16px;
-  }
+  } */
   .nuxt-content p {
-    font-size: 14px;
+    /* font-size: 14px; */
     margin-bottom: 15px;
   }
-  .nuxt-content p code {
+  /* .nuxt-content p code {
     font-weight: 600;
     font-style: italic;
     font-size: 12px;
-  }
+  } */
 }
 
 @media screen and (max-width: 425px) {
@@ -278,7 +282,7 @@ pre[class*="language-"] {
     margin-left: 5px;
     margin-right: 5px;
   }
-  .article__title {
+  /* .article__title {
     margin: 0;
     padding: 0;
     font-size: 16px;
@@ -290,15 +294,15 @@ pre[class*="language-"] {
   .nuxt-content h3 {
     font-weight: bold;
     font-size: 15px;
-  }
+  } */
   .nuxt-content p {
-    font-size: 13px;
+    /* font-size: 13px; */
     margin-bottom: 15px;
   }
-  .nuxt-content p code {
+  /* .nuxt-content p code {
     font-weight: 600;
     font-style: italic;
     font-size: 12px;
-  }
+  } */
 }
 </style>
