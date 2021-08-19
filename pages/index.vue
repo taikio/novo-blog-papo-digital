@@ -47,7 +47,8 @@ export default {
       .sortBy('publishDate', 'desc')
       .fetch()
 
-    const tagsList = articles.map(a => a.tag).sort()
+    const tempTags = articles.map(a => a.tag).sort()
+    const tagsList = Array.from(new Set(tempTags))
     const activeTag = ''
 
     return {
@@ -145,18 +146,13 @@ export default {
 }
 
 .page__content {
-  /* display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 12px; */
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-	grid-gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .card {
   position: relative;
-  width: 413px;
+  width: 30.6%;
   margin: 24px;
 	height: 380px;
   border: 1px solid #ededed;
@@ -205,11 +201,12 @@ export default {
 }
 
 @media screen and (min-width: 1441px) and (max-width: 1930px) {
-  .card {
-    width: 580px;
-  }
   .tag {
-    margin: 6px 0;
+    margin: 6px;
+  }
+  .card {
+    width: 29.9%;
+    height: 445px;
   }
   .card__body h2 {
     font-size: 20px;
@@ -229,7 +226,7 @@ export default {
     font-size: 1rem;
   }
   .card {
-    width: 422px;
+    width: 29.8%;
   }
   .card__body h2 {
     font-size: 18px;
@@ -249,7 +246,7 @@ export default {
     font-size: 1rem;
   }
   .card {
-    width: 284px;
+    width: 45%;
   }
   .card__body h2 {
     font-size: 15px;
@@ -268,11 +265,8 @@ export default {
     padding: 7px 14px;
     font-size: 1rem;
   }
-  .page__content {
-    grid-template-columns: 1fr 1fr;
-  }
   .card {
-    width: 325px;
+    width: 43.4%;
   }
   .card__body h2 {
     font-size: 15px;
@@ -294,11 +288,8 @@ export default {
     padding: 6px 12px;
     font-size: 1rem;
   }
-  .page__content {
-    grid-template-columns: 1fr;
-  }
   .card {
-    width: 372px;
+    width: 87.7%;
   }
   .card__body h2 {
     font-size: 16px;
