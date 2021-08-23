@@ -133,6 +133,13 @@ export default {
           href: `https://www.papodigital.net.br/${this.$route.params.slug}`,
         },
       ],
+      script: [
+        {
+          src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+          'data-ad-client': 'ca-pub-4727865344641486',
+          async: true
+        }
+      ]
     }
   },
   methods: {
