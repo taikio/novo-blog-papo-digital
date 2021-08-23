@@ -133,7 +133,9 @@ export default {
     routes: [
       '/blog/criando-documentos-pdf-com-reactjs',
       '/blog/produtividade-vscode-com-snippets',
-      '/blog/introducao-ao-nuxtjs'
+      '/blog/introducao-ao-nuxtjs',
+      '/blog/componentes-reutilizaveis-com-vue-slots',
+      '/blog/deploy-sites-nuxt-github-pages'
     ]
   },
 
