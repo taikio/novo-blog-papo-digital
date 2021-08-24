@@ -73,6 +73,13 @@ export default {
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter&family=Roboto&display=swap' },
       { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css' }
+    ],
+    script: [
+      {
+        src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+        'data-ad-client': 'ca-pub-4727865344641486',
+        async: true
+      }
     ]
   },
 
@@ -128,7 +135,8 @@ export default {
       '/blog/produtividade-vscode-com-snippets',
       '/blog/introducao-ao-nuxtjs',
       '/blog/componentes-reutilizaveis-com-vue-slots',
-      '/blog/deploy-sites-nuxt-github-pages'
+      '/blog/deploy-sites-nuxt-github-pages',
+      '/sobre'
     ]
   },
 

@@ -36,6 +36,27 @@
         </div>
       </div>
     </div>
+
+    <div class="page__text">
+      <p>
+        Olá caro leitor, seja muito bem vindo ao blog Papo Digital.
+        <br/>
+
+        Aqui você vai encontrar vários posts sobre carreira em TI, mundo tech
+        e principalmente tutoriais de programação sobre o ecosistema Vuejs.
+        <br/>
+
+        Se você quer aprender mais sobre Unit Tests no front-end este é o lugar certo.
+        Também terá vários tutoriais sobre criação de componentes reutilizáveis e
+        dicas de produtividade para te ajudar a entregar mais resultado com menos
+        esforço. Então já salva aí nos seus favoritos porque toda semana sai conteúdo
+        novo.
+        <br/>
+
+        Se você gosta do nosso conteúdo e quer ajudar o projeto a crescer, considere doar
+        alguns BATs, ou se ver algum anúncio que te interesse pode clicar sem medo.
+      </p>
+    </div>
   </div>
 </template>
 
@@ -198,6 +219,10 @@ export default {
   border-radius: 6px;
   background: #3B97D3;
   color: #fff;
+}
+
+.page__text {
+  display: none;
 }
 
 @media screen and (min-width: 1441px) and (max-width: 1930px) {
