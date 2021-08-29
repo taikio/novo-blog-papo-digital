@@ -11,13 +11,8 @@
     <div class="top-bar__links">
       <ul>
         <li>
-          <a href="https://www.linkedin.com/in/welker-arantes-12280b116" target="_blank" title="Ir para Linkedin">
-            <i class="bi-linkedin"></i>
-          </a>
-        </li>
-        <li>
-          <a href="https://github.com/taikio" target="_blank" title="Ir para Github">
-            <i class="bi-github"></i>
+          <a href="https://www.youtube.com/channel/UCOkZkn7IzpbHkLxFsy4LyCg" target="_blank" title="Ir para Linkedin">
+            <em class="bi-youtube"></em> <span>Visitar Canal</span>
           </a>
         </li>
       </ul>
@@ -79,7 +74,7 @@ export default {
   display: inline-block;
 }
 .top-bar__links ul li a {
-  font-size: 18px;
+  display: flex;
   text-decoration: none;
   outline: none;
   color: #3B97D3;
@@ -87,8 +82,15 @@ export default {
 }
 .top-bar__links ul li a:hover {
   color: #52BA9B;
-  text-decoration: underline;
   font-weight: 500;
+}
+.top-bar__links ul li a em {
+  font-size: 25px;
+}
+.top-bar__links ul li a span {
+  font-size: 16px;
+  margin-top: 4px;
+  margin-left: 10px;
 }
 
 /* @media screen and (min-width: 1441px) and (max-width: 1930px) {

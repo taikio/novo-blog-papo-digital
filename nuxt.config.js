@@ -136,7 +136,7 @@ export default {
       '/blog/introducao-ao-nuxtjs',
       '/blog/componentes-reutilizaveis-com-vue-slots',
       '/blog/deploy-sites-nuxt-github-pages',
-      '/sobre'
+      '/blog/como-cortar-textos-longos-com-css'
     ]
   },
 
