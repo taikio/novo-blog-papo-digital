@@ -1,3 +1,5 @@
+import getRoutes from "./utils/getRoutes";
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -68,7 +70,6 @@ export default {
       // https://moz.com/learn/seo/canonicalization
       { hid: "canonical", rel: "canonical", href: "https://www.papodigital.net.br" },
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css' },
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter&family=Roboto&display=swap' },
       { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css' }
@@ -128,15 +129,9 @@ export default {
   },
   sitemap: {
     hostname: 'https://www.papodigital.net.br',
-    gzip: true,
-    routes: [
-      '/blog/criando-documentos-pdf-com-reactjs',
-      '/blog/produtividade-vscode-com-snippets',
-      '/blog/introducao-ao-nuxtjs',
-      '/blog/componentes-reutilizaveis-com-vue-slots',
-      '/blog/deploy-sites-nuxt-github-pages',
-      '/blog/como-cortar-textos-longos-com-css'
-    ]
+    routes() {
+      return getRoutes()
+    }
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
