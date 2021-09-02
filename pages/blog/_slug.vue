@@ -62,24 +62,24 @@ export default {
         // General social media meta tags
         {
           hid: "og:title",
-          property: "og:title",
+          name: "og:title",
           content: this.article.title,
         },
         {
           hid: "og:description",
-          property: "og:description",
+          name: "og:description",
           content: this.article.description,
         },
         {
           hid: "og:image",
-          property: "og:image",
+          name: "og:image",
           content: this.coverImage,
         },
-        { property: "og:image:width", content: "740" },
-        { property: "og:image:height", content: "300" },
+        { hid: 'og:image:width', name: "og:image:width", content: "740" },
+        { hid: 'og:image:height', name: "og:image:height", content: "300" },
         {
           hid: "og:url",
-          property: "og:url",
+          name: "og:url",
           content: `https://www.papodigital.net.br/${this.$route.params.slug}`
         },
 
@@ -108,22 +108,18 @@ export default {
         // Aditional article meta tags
         {
           property: "article:published_time",
-          content: this.article.createdAt,
-        },
-        {
-          property: "article:modified_time",
-          content: this.article.updatedAt,
+          content: this.article.publishDate,
         },
         {
           property: "article:tag",
-          content: this.article.tags ? this.article.tags.toString() : "",
+          content: this.article.tag ? this.article.tag : "",
         },
         { name: "twitter:label1", content: "Escrito Por" },
         { name: "twitter:data1", content: "Welker Arantes" },
         { name: "twitter:label2", content: "Tag" },
         {
           name: "twitter:data2",
-          content: this.article.tags ? this.article.tags.toString() : "",
+          content: this.article.tag ? this.article.tag : "",
         }
       ],
       link: [
