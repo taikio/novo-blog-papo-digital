@@ -4,16 +4,22 @@
       v-if="prev"
       :to="{ name: 'blog-slug', params: { slug: prev.slug } }"
       class="link"
+      :title="prev.title"
     >
-      <i class="bi-arrow-left"></i> {{ prev.title }}
+      <i class="bi-arrow-left"></i>
+      <div class="text">{{ prev.title }}</div>
     </NuxtLink>
+
     <span v-else>&nbsp;</span>
+
     <NuxtLink
       v-if="next"
       :to="{ name: 'blog-slug', params: { slug: next.slug } }"
       class="link"
+      :title="next.title"
     >
-      {{ next.title }} <i class="bi-arrow-right"></i>
+      <div class="text">{{ next.title }}</div>
+      <i class="bi-arrow-right"></i>
     </NuxtLink>
     <span v-else>&nbsp;</span>
   </div>
@@ -53,6 +59,7 @@ export default {
 }
 
 .link {
+  display: flex;
   font-size: 16px;
   text-decoration: none;
   outline: none;
@@ -62,6 +69,12 @@ export default {
 .link:hover {
   color: #52BA9B;
   font-weight: 500;
+}
+.link .text {
+  max-width: 450px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 /* @media screen and (min-width: 1441px) and (max-width: 1930px) {

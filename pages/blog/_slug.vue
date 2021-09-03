@@ -1,24 +1,37 @@
 <template>
   <article>
     <div class="article__cover" :style="{ backgroundImage: `url(${coverImage})` }" />
-    <div class="article__content">
-      <h1 class="article__title">{{ article.title }}</h1>
-      <p class="article__publish">Data de Publicação: {{ formatDate(article.publishDate) }}</p>
-      <!-- exemplo de table of contents -->
-      <!-- <nav>
-        <ul>
-          <li v-for="link of article.toc" :key="link.id">
-            <NuxtLink :to="`#${link.id}`">{{ link.text }}</NuxtLink>
-          </li>
-        </ul>
-      </nav> -->
 
-      <nuxt-content :document="article" />
+    <div class="article__body">
+      <div class="article__ads">
+        <adsbygoogle />
+      </div>
 
-      <prev-next :prev="prev" :next="next" />
+      <div class="article__content">
+        <h1 class="article__title">{{ article.title }}</h1>
+        <p class="article__publish">Data de Publicação: {{ formatDate(article.publishDate) }}</p>
+        <!-- exemplo de table of contents -->
+        <!-- <nav>
+          <ul>
+            <li v-for="link of article.toc" :key="link.id">
+              <NuxtLink :to="`#${link.id}`">{{ link.text }}</NuxtLink>
+            </li>
+          </ul>
+        </nav> -->
 
-      <div class="article__comments">
-        <Disqus />
+
+
+        <nuxt-content :document="article" />
+
+        <prev-next :prev="prev" :next="next" />
+
+        <div class="article__comments">
+          <Disqus />
+        </div>
+      </div>
+
+      <div class="article__ads">
+        <adsbygoogle />
       </div>
     </div>
   </article>
@@ -161,9 +174,18 @@ article {
   background-position: top;
 }
 
+.article__body {
+  width: 100%;
+  display: flex;
+}
+
+.article__ads {
+  width: 12.3%;
+}
+
 .article__content {
-  width: 950px;
-  padding-top: 18px;
+  width: 75%;
+  padding: 18px 8px 6px 8px;
   display: flex;
   flex-direction: column;
   align-self: center;
