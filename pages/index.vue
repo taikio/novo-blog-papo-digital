@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     getCardImage(article) {
-      const imagePath = require(`~/assets/images/${article.img}`)
+      const imagePath = article.img
       return `url(${imagePath})`
     },
     getCardDescription(article) {
@@ -132,7 +132,7 @@ export default {
 .page__banner {
   width: 100%;
   height: 44vh;
-  background: url('~assets/images/Banner_home.png');
+  background: url('/Banner_home.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

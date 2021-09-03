@@ -1,6 +1,10 @@
 <template>
   <article>
-    <div class="article__cover" :style="{ backgroundImage: `url(${coverImage})` }" />
+    <div class="progress-container">
+      <div id="progress-bar" class="progress-bar" />
+    </div>
+
+    <div class="article__cover" :style="{ backgroundImage: `url(/${coverImage})` }" />
 
     <div class="article__body">
       <div class="article__ads">
@@ -19,8 +23,6 @@
           </ul>
         </nav> -->
 
-
-
         <nuxt-content :document="article" />
 
         <prev-next :prev="prev" :next="next" />
@@ -31,7 +33,6 @@
       </div>
 
       <div class="article__ads">
-        <adsbygoogle />
       </div>
     </div>
   </article>
@@ -44,7 +45,7 @@ export default {
   components: { PrevNext },
   async asyncData({ $content, params }) {
     const article = await $content('articles', params.slug).fetch()
-    const coverImage = require(`~/assets/images/${article.img}`)
+    const coverImage = article.img
     const disqusConfig = {
       url: `https://www.papodigital.net.br/blog/${params.slug}`,
       identifier: `papodigital-${article.slug}`,
@@ -144,6 +145,11 @@ export default {
       ]
     }
   },
+  mounted() {
+    window.onscroll = () => {
+      this.updateProgressBar()
+    }
+  },
   methods: {
     formatDate(date) {
       const options = { year: 'numeric', month: 'long', day: 'numeric' }
@@ -152,6 +158,16 @@ export default {
         return new Date(date).toLocaleDateString('pt', options)
       }
       return new Date().toLocaleDateString('pt', options)
+    },
+    updateProgressBar() {
+      const element = window.document
+      const progressBarEl = document.querySelector('#progress-bar')
+
+      const winScroll = element.body.scrollTop || element.documentElement.scrollTop
+      const height = element.documentElement.scrollHeight - element.documentElement.clientHeight
+      const scrolled = (winScroll / height) * 100
+
+      progressBarEl.style.width = `${scrolled}%`
     }
   }
 }
@@ -164,6 +180,19 @@ article {
   margin-top: 52px;
   height: 100%;
   width: 100%;
+}
+
+.progress-container {
+  position: fixed;
+  top: 52px;
+  width: 100%;
+  z-index: 200;
+}
+
+.progress-bar {
+  background: #52BA9B;
+  height: 6px;
+  width: 0%;
 }
 
 .article__cover {

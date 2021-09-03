@@ -18,7 +18,7 @@
 export default {
   computed: {
     imagePath() {
-      return require('~/assets/images/404.png')
+      return '404.png'
     }
   }
 }

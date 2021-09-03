@@ -36,6 +36,7 @@ export default {
   box-shadow: 0 3px 6px #ededed;
   display: flex;
   justify-content: space-between;
+  flex-wrap: nowrap;
   position: fixed;
   top: 0;
   left: 0;

@@ -16,7 +16,7 @@ export default {
   computed: {
     imagePath() {
       if (this.imageName) {
-        return require(`~/assets/images/post-gallery/${this.imageName}`)
+        return `/post-gallery/${this.imageName}`
       }
       return ''
     }
