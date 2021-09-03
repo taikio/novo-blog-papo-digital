@@ -1,0 +1,4 @@
+Sitemap: https://www.papodigital.net.br/sitemap.xml
+
+user-agent: *
+Allow: /
