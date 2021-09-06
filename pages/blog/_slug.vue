@@ -8,7 +8,7 @@
 
     <div class="article__body">
       <div class="article__ads">
-        <adsbygoogle />
+        <!-- <adsbygoogle ad-slot="" /> -->
       </div>
 
       <div class="article__content">

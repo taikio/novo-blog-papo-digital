@@ -16,8 +16,6 @@ export default {
       // https://moz.com/learn/seo/canonicalization
       { hid: "canonical", rel: "canonical", href: "https://www.papodigital.net.br" },
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter&family=Roboto&display=swap' },
       { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css' }
     ]
   },
@@ -43,6 +41,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
+    '@nuxtjs/google-fonts'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -76,6 +75,13 @@ export default {
   },
   'google-adsense': {
     id: 'ca-pub-4727865344641486'
+  },
+  googleFonts: {
+    /* module options */
+    families: {
+      Roboto: true,
+    },
+    display: 'swap'
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
