@@ -72,11 +72,11 @@ export default {
       description: this.articleDescription,
       contentType: 'article',
       url: this.articleUrl,
-      socialBanner: this.coverImage,
+      socialBanner: this.articleImage,
       twitterUrl: this.articleUrl,
       twitterTitle: this.pageTitle,
       twitterDescription: this.articleDescription,
-      twitterSocialBanner: this.coverImage
+      twitterSocialBanner: this.articleImage
     })
 
     const articleMetaTags = [
@@ -127,12 +127,15 @@ export default {
     articleUrl() {
       return `https://www.papodigital.net.br/blog/${this.$route.params.slug}`
     },
+    articleImage() {
+      return `https://www.papodigital.net.br/${this.article.img}`
+    },
     pageTitle() {
       return `Papo Digital | ${this.article.title}`
     },
     coverImage() {
       return `/${this.article.img}`
-    }
+    },
   },
   mounted() {
     window.onscroll = () => {

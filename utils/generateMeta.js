@@ -5,7 +5,7 @@ export default (overrides = {}) => {
     siteName: 'Blog Papo Digital',
     contentType: 'website',
     url: 'https://www.papodigital.net.br',
-    socialBanner: '/banner_social_media.png',
+    socialBanner: 'https://www.papodigital.net.br/banner_social_media.png',
     bannerWidth: '740',
     bannerHeight: '300',
     twitterSiteName: '@papodigital',
@@ -13,7 +13,7 @@ export default (overrides = {}) => {
     twitterUrl: 'https://www.papodigital.net.br',
     twitterTitle: 'Blog Papo Digital',
     twitterDescription: 'O Papo Digital é um blog que fala sobre mundo tech, programação e carreira',
-    twitterSocialBanner: '/banner_social_media.png'
+    twitterSocialBanner: 'https://www.papodigital.net.br/banner_social_media.png'
   }
 
   const generatedMeta = {...defaultMeta, ...overrides}
@@ -22,6 +22,7 @@ export default (overrides = {}) => {
     { charset: 'utf-8' },
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
     { hid: 'description', name: 'description', content: generatedMeta.description },
+    { hid: 'robots', name: 'robots', content: 'index,follow'},
 
     // General social media meta tags (Open Graph)
     { hid: 'og:site_name', property: 'og:site_name', content: generatedMeta.siteName },
