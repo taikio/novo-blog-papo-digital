@@ -46,7 +46,6 @@ export default {
   components: { PrevNext },
   async asyncData({ $content, params }) {
     const article = await $content('articles', params.slug).fetch()
-    const coverImage = `/${article.img}`
     const disqusConfig = {
       url: `https://www.papodigital.net.br/blog/${params.slug}`,
       identifier: `papodigital-${article.slug}`,
@@ -62,59 +61,77 @@ export default {
 
     return {
       article,
-      coverImage,
       prev,
       next,
       disqusConfig
     }
   },
   head() {
-    const { title, description, publishDate, tag } = this.article
-    const articleUrl = `https://www.papodigital.net.br/blog/${this.$route.params.slug}`
-    const pageTitle = `Papo Digital | ${title}`
-
     const basicMetaTags = generateMeta({
-      pageTitle,
-      description,
+      pageTitle: this.pageTitle,
+      description: this.articleDescription,
       contentType: 'article',
-      url: articleUrl,
+      url: this.articleUrl,
       socialBanner: this.coverImage,
-      twitterUrl: articleUrl,
-      twitterTitle: pageTitle,
-      twitterDescription: description,
+      twitterUrl: this.articleUrl,
+      twitterTitle: this.pageTitle,
+      twitterDescription: this.articleDescription,
       twitterSocialBanner: this.coverImage
     })
 
     const articleMetaTags = [
       {
         property: "article:published_time",
-        content: publishDate,
+        content: this.articlePublishDate,
       },
       {
         property: "article:tag",
-        content: tag ,
+        content: this.articleTag,
       },
       { name: "twitter:label1", content: "Escrito Por" },
       { name: "twitter:data1", content: "Welker Arantes" },
       { name: "twitter:label2", content: "Tag" },
       {
         name: "twitter:data2",
-        content: tag,
+        content: this.articleTag,
       }
     ]
 
     const metaTagsList = [...basicMetaTags, ...articleMetaTags]
 
     return {
-      title: pageTitle,
+      title: this.pageTitle,
       meta: metaTagsList,
       link: [
         {
           hid: "canonical",
           rel: "canonical",
-          href: articleUrl,
+          href: this.articleUrl,
         },
       ]
+    }
+  },
+  computed: {
+    articleTitle() {
+      return this.article.title
+    },
+    articleDescription() {
+      return this.article.description
+    },
+    articlePublishDate() {
+      return this.article.publishDate
+    },
+    articleTag() {
+      return this.article.tag
+    },
+    articleUrl() {
+      return `https://www.papodigital.net.br/blog/${this.$route.params.slug}`
+    },
+    pageTitle() {
+      return `Papo Digital | ${this.article.title}`
+    },
+    coverImage() {
+      return `/${this.article.img}`
     }
   },
   mounted() {
