@@ -70,7 +70,7 @@ export default {
   },
   head() {
     const { title, description, publishDate, tag } = this.article
-    const articleUrl = `https://www.papodigital.net.br/${this.$route.params.slug}`
+    const articleUrl = `https://www.papodigital.net.br/blog/${this.$route.params.slug}`
     const pageTitle = `Papo Digital | ${title}`
 
     const basicMetaTags = generateMeta({
@@ -112,7 +112,7 @@ export default {
         {
           hid: "canonical",
           rel: "canonical",
-          href: `https://www.papodigital.net.br/${this.$route.params.slug}`,
+          href: articleUrl,
         },
       ]
     }
