@@ -4,7 +4,7 @@
       <div id="progress-bar" class="progress-bar" />
     </div>
 
-    <div class="article__cover" :style="{ backgroundImage: `url(/${coverImage})` }" />
+    <div class="article__cover" :style="{ backgroundImage: `url(${coverImage})` }" />
 
     <div class="article__body">
       <div class="article__ads">
@@ -40,12 +40,13 @@
 
 <script>
 import PrevNext from '@/components/PrevNext.vue'
+import generateMeta from '@/utils/generateMeta'
 
 export default {
   components: { PrevNext },
   async asyncData({ $content, params }) {
     const article = await $content('articles', params.slug).fetch()
-    const coverImage = article.img
+    const coverImage = `/${article.img}`
     const disqusConfig = {
       url: `https://www.papodigital.net.br/blog/${params.slug}`,
       identifier: `papodigital-${article.slug}`,
@@ -68,74 +69,45 @@ export default {
     }
   },
   head() {
+    const { title, description, publishDate, tag } = this.article
+    const articleUrl = `https://www.papodigital.net.br/${this.$route.params.slug}`
+    const pageTitle = `Papo Digital | ${title}`
+
+    const basicMetaTags = generateMeta({
+      pageTitle,
+      description,
+      contentType: 'article',
+      url: articleUrl,
+      socialBanner: this.coverImage,
+      twitterUrl: articleUrl,
+      twitterTitle: pageTitle,
+      twitterDescription: description,
+      twitterSocialBanner: this.coverImage
+    })
+
+    const articleMetaTags = [
+      {
+        property: "article:published_time",
+        content: publishDate,
+      },
+      {
+        property: "article:tag",
+        content: tag ,
+      },
+      { name: "twitter:label1", content: "Escrito Por" },
+      { name: "twitter:data1", content: "Welker Arantes" },
+      { name: "twitter:label2", content: "Tag" },
+      {
+        name: "twitter:data2",
+        content: tag,
+      }
+    ]
+
+    const metaTagsList = [...basicMetaTags, ...articleMetaTags]
+
     return {
-      title: `Papo Digital | ${this.article.title}`,
-      meta: [
-        { hid: 'description', name: 'description', content: this.article.description },
-
-        // General social media meta tags
-        {
-          hid: "og:title",
-          name: "og:title",
-          content: this.article.title,
-        },
-        {
-          hid: "og:description",
-          name: "og:description",
-          content: this.article.description,
-        },
-        {
-          hid: "og:image",
-          name: "og:image",
-          content: this.coverImage,
-        },
-        { hid: 'og:image:width', name: "og:image:width", content: "740" },
-        { hid: 'og:image:height', name: "og:image:height", content: "300" },
-        {
-          hid: "og:url",
-          name: "og:url",
-          content: `https://www.papodigital.net.br/${this.$route.params.slug}`
-        },
-
-        // Twitter card meta tags
-        {
-          hid: "twitter:title",
-          name: "twitter:title",
-          content: this.article.title,
-        },
-        {
-          hid: "twitter:description",
-          name: "twitter:description",
-          content: this.article.description,
-        },
-        {
-          hid: "twitter:image",
-          name: "twitter:image",
-          content: this.coverImage,
-        },
-        {
-          hid: "twitter:url",
-          name: "twitter:url",
-          content: `https://www.papodigital.net.br/${this.$route.params.slug}`
-        },
-
-        // Aditional article meta tags
-        {
-          property: "article:published_time",
-          content: this.article.publishDate,
-        },
-        {
-          property: "article:tag",
-          content: this.article.tag ? this.article.tag : "",
-        },
-        { name: "twitter:label1", content: "Escrito Por" },
-        { name: "twitter:data1", content: "Welker Arantes" },
-        { name: "twitter:label2", content: "Tag" },
-        {
-          name: "twitter:data2",
-          content: this.article.tag ? this.article.tag : "",
-        }
-      ],
+      title: pageTitle,
+      meta: metaTagsList,
       link: [
         {
           hid: "canonical",

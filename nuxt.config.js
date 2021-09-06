@@ -1,4 +1,5 @@
 import getRoutes from "./utils/getRoutes";
+import generateMeta from "./utils/generateMeta";
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -10,62 +11,7 @@ export default {
     htmlAttrs: {
       lang: 'en'
     },
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'O Papo Digital é um blog que fala sobre mundo tech, programação e carreira' },
-      { name: 'format-detection', content: 'telephone=no' },
-
-      // General social media meta tags
-      { hid: 'og:site_name', name: 'og:site_name', content: 'Blog Papo Digital' },
-      { hid: 'og:type', name: 'og:type', content: 'website' },
-      {
-        hid: 'og:url',
-        name: 'og:url',
-        content: 'https://www.papodigital.net.br',
-      },
-      {
-        hid: 'og:title',
-        name: 'og:title',
-        content: 'Blog Papo Digital',
-      },
-      {
-        hid: 'og:description',
-        name: 'og:description',
-        content: 'O Papo Digital é um blog que fala sobre mundo tech, programação e carreira',
-      },
-      {
-        hid: 'og:image',
-        name: 'og:image',
-        content: '/banner_social_media.png',
-      },
-      { hid: 'og:image:width', name: 'og:image:width', content: '740' },
-      { hid: 'og:image:height' ,name: "og:image:height", content: "300" },
-
-      // Twitter card meta tags
-      { hid: 'twitter:site' ,name: "twitter:site", content: "@papodigital" },
-      { hid: 'twitter:card' ,name: "twitter:card", content: "summary_large_image" },
-      {
-        hid: "twitter:url",
-        name: "twitter:url",
-        content: "https://www.papodigital.net.br",
-      },
-      {
-        hid: "twitter:title",
-        name: "twitter:title",
-        content: "Blog Papo Digital",
-      },
-      {
-        hid: "twitter:description",
-        name: "twitter:description",
-        content: "O Papo Digital é um blog que fala sobre mundo tech, programação e carreira",
-      },
-      {
-        hid: "twitter:image",
-        name: "twitter:image",
-        content: "/banner_social_media.png",
-      },
-    ],
+    meta: generateMeta(),
     link: [
       // https://moz.com/learn/seo/canonicalization
       { hid: "canonical", rel: "canonical", href: "https://www.papodigital.net.br" },
