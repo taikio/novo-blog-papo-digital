@@ -19,7 +19,7 @@
     </div>
 
     <div class="page__content">
-      <div v-for="article of articles" :key="article.slug" class="card" @click="goToArticle(article)">
+      <NuxtLink v-for="article of articles" :key="article.slug" class="card" :to="`/blog/${article.slug}`">
         <div class="card__image" :style="{ backgroundImage: getCardImage(article) }" />
 
         <div class="card__body">
@@ -34,7 +34,7 @@
             {{ article.tag }}
           </span>
         </div>
-      </div>
+      </NuxtLink>
     </div>
 
     <div class="page__text">
@@ -180,6 +180,8 @@ export default {
   border-radius: 6px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.25);
   transition: 0.3s;
+  outline: none;
+  text-decoration: none;
 }
 .card:hover {
   border: 1px solid #52BA9B;
@@ -196,6 +198,9 @@ export default {
 }
 .card__body {
   padding: 10px;
+}
+.card__body h2 {
+  color: rgba(0, 0, 0, 0.80);
 }
 .card__body p {
   color: rgba(0, 0, 0, 0.70);

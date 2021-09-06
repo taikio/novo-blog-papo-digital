@@ -152,6 +152,8 @@ export default {
       const element = window.document
       const progressBarEl = document.querySelector('#progress-bar')
 
+      if (!progressBarEl) { return }
+
       const winScroll = element.body.scrollTop || element.documentElement.scrollTop
       const height = element.documentElement.scrollHeight - element.documentElement.clientHeight
       const scrolled = (winScroll / height) * 100
