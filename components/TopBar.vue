@@ -11,7 +11,7 @@
     <div class="top-bar__links">
       <ul>
         <li>
-          <a href="https://www.youtube.com/channel/UCOkZkn7IzpbHkLxFsy4LyCg" target="_blank" title="Ir para Linkedin">
+          <a href="https://www.youtube.com/channel/UCOkZkn7IzpbHkLxFsy4LyCg" target="_blank" title="Ir para Youtube">
             <em class="bi-youtube"></em> <span>Visitar Canal</span>
           </a>
         </li>

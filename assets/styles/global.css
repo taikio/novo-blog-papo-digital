@@ -9,23 +9,25 @@ body {
   background: #fafafa;
 }
 
-::-webkit-scrollbar {
+html ::-webkit-scrollbar {
   width: 10px;
 }
 
-::-webkit-scrollbar-thumb {
+html ::-webkit-scrollbar-thumb {
   border-radius: 50px;
-  background: #9e9e9e;
+  background: rgba(40, 86, 128, 0.8);
 }
 
-::-webkit-scrollbar-track {
-  background: #ededed;
+html ::-webkit-scrollbar-track {
+  background: rgba(196, 202, 207, 0.8);
 }
 
 #__nuxt,
 #__layout {
   width: 100%;
   height: 100%;
+  scrollbar-color: #3a97d4 #ededed !important;
+  scrollbar-width: auto;
 }
 
 .py-1 {
