@@ -1,5 +1,5 @@
-import getRoutes from "./utils/getRoutes";
-import generateMeta from "./utils/generateMeta";
+import getRoutes from './utils/getRoutes'
+import generateMeta from './utils/generateMeta'
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -9,28 +9,33 @@ export default {
   head: {
     title: 'Blog Papo Digital',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'en',
     },
     meta: generateMeta(),
     link: [
       // https://moz.com/learn/seo/canonicalization
-      { hid: "canonical", rel: "canonical", href: "https://www.papodigital.net.br" },
+      {
+        hid: 'canonical',
+        rel: 'canonical',
+        href: 'https://www.papodigital.net.br',
+      },
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css' }
-    ]
+      {
+        rel: 'stylesheet',
+        href: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css',
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ['~/assets/styles/global.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-    '@/plugins/disqus'
-  ],
+  plugins: ['@/plugins/disqus'],
   /*
    ** Customize the progress-bar color
    */
-   loading: {
+  loading: {
     color: '#3B97D3',
   },
 
@@ -41,7 +46,8 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
-    '@nuxtjs/google-fonts'
+    '@nuxtjs/google-fonts',
+    '@nuxt/postcss8',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -53,7 +59,7 @@ export default {
     // https://sitemap.nuxtjs.org/guide/setup
     '@nuxtjs/sitemap',
     // https://www.npmjs.com/package/@nuxtjs/google-adsense
-    '@nuxtjs/google-adsense'
+    '@nuxtjs/google-adsense',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -63,28 +69,34 @@ export default {
   content: {
     markdown: {
       prism: {
-        theme: 'prism-themes/themes/prism-material-oceanic.css'
-      }
-    }
+        theme: 'prism-themes/themes/prism-material-oceanic.css',
+      },
+    },
   },
   sitemap: {
     hostname: 'https://www.papodigital.net.br',
     routes() {
       return getRoutes()
-    }
+    },
   },
   'google-adsense': {
-    id: 'ca-pub-4727865344641486'
+    id: 'ca-pub-4727865344641486',
   },
   googleFonts: {
     /* module options */
     families: {
       Roboto: true,
     },
-    display: 'swap'
+    display: 'swap',
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+    postcss: {
+      plugins: {
+        tailwindcss: {},
+        autoprefixer: {},
+      },
+    },
+  },
 }
