@@ -1,7 +1,10 @@
 <template>
   <nav class="top-bar">
     <NuxtLink to="/" class="top-bar__logo">
-      <img :src="require('~/assets/images/papo-digital-logo-offside-small.png')" alt="Papo Digital">
+      <img
+        :src="require('~/assets/images/papo-digital-logo-offside-small.png')"
+        alt="Papo Digital"
+      />
     </NuxtLink>
 
     <div class="top-bar__search">
@@ -11,8 +14,13 @@
     <div class="top-bar__links">
       <ul>
         <li>
-          <a href="https://www.youtube.com/channel/UCOkZkn7IzpbHkLxFsy4LyCg" target="_blank" title="Ir para Youtube">
-            <em class="bi-youtube"></em> <span>Visitar Canal</span>
+          <a
+            href="https://www.youtube.com/channel/UCOkZkn7IzpbHkLxFsy4LyCg"
+            target="_blank"
+            title="Ir para Youtube"
+          >
+            <em class="bi-youtube"></em>
+            <span>Visitar Canal</span>
           </a>
         </li>
       </ul>
@@ -24,7 +32,7 @@
 import AppSarchInput from './AppSearchInput.vue'
 
 export default {
-  components: { AppSarchInput }
+  components: { AppSarchInput },
 }
 </script>
 
@@ -78,11 +86,11 @@ export default {
   display: flex;
   text-decoration: none;
   outline: none;
-  color: #3B97D3;
+  color: #3b97d3;
   transition: 0.3s ease-in-out;
 }
 .top-bar__links ul li a:hover {
-  color: #52BA9B;
+  color: #52ba9b;
   font-weight: 500;
 }
 .top-bar__links ul li a em {
