@@ -1,331 +1,122 @@
-<template>
-  <div class="page">
-    <div class="page__banner" />
+<script lang="ts" setup>
+import generateMeta from '@/utils/generateMeta'
+import SearchBar from '@/components/search-bar.vue'
+import { formatDate } from '@/utils/datetime'
+import { PostContent } from '@/types/post-content'
 
-    <div class="page__tags">
-      <span class="tag" :class="{'tag--active': !activeTag}" @click="fetchAllArticles()">
-        #Todos
-      </span>
+const router = useRouter()
+const activeTag = ref('Todos')
+const tagsList = ref([''])
 
-      <span
-        v-for="tag in tagsList"
-        :key="tag"
-        class="tag"
-        :class="{'tag--active': activeTag === tag}"
-        @click="fetchArticlesByTag(tag)"
-      >
-        {{ `#${tag}` }}
-      </span>
-    </div>
+useHead({
+  title: 'Blog Papo Digital',
+  meta: generateMeta(),
+})
 
-    <div class="page__content">
-      <NuxtLink v-for="article of articles" :key="article.slug" class="card" :to="`/blog/${article.slug}`">
-        <div class="card__image" :style="{ backgroundImage: getCardImage(article) }" />
+const { data: posts } = await useAsyncData('posts', () => {
+  return queryContent<PostContent>().sort({ publishDate: -1 }).find()
+})
 
-        <div class="card__body">
-          <h2>{{ article.title }}</h2>
-          <p>{{ getCardDescription(article) }}</p>
-        </div>
+onMounted(() => {
+  const postsTags = posts.value?.map(post => post.tag).sort() ?? []
+  postsTags.unshift('Todos')
+  tagsList.value = Array.from(new Set(postsTags))
+})
 
-        <div class="card__footer">
-          <span class="card__publish-date">{{ formatDate(article.publishDate) }}</span>
+const formatPublishDate = (publishDate: Date) => {
+  return formatDate(publishDate)
+}
 
-          <span class="card__tag">
-            {{ article.tag }}
-          </span>
-        </div>
-      </NuxtLink>
-    </div>
+const openPost = (postPath: string) => {
+  router.push(`/blog${postPath}`)
+}
 
-    <div class="page__text">
-      <p>
-        Olá caro leitor, seja muito bem vindo ao blog Papo Digital.
-        <br/>
-
-        Aqui você vai encontrar vários posts sobre carreira em TI, mundo tech
-        e principalmente tutoriais de programação sobre o ecosistema Vuejs.
-        <br/>
-
-        Se você quer aprender mais sobre Unit Tests no front-end este é o lugar certo.
-        Também terá vários tutoriais sobre criação de componentes reutilizáveis e
-        dicas de produtividade para te ajudar a entregar mais resultado com menos
-        esforço. Então já salva aí nos seus favoritos porque toda semana sai conteúdo
-        novo.
-        <br/>
-
-        Se você gosta do nosso conteúdo e quer ajudar o projeto a crescer, considere doar
-        alguns BATs, ou se ver algum anúncio que te interesse pode clicar sem medo.
-      </p>
-    </div>
-  </div>
-</template>
-
-<script>
-export default {
-  async asyncData({ $content, params }) {
-    const articles = await $content('articles')
-      .only(['title', 'description', 'img', 'slug', 'publishDate', 'tag'])
-      .sortBy('publishDate', 'desc')
-      .fetch()
-
-    const tempTags = articles.map(a => a.tag).sort()
-    const tagsList = Array.from(new Set(tempTags))
-    const activeTag = ''
-
-    return {
-      articles,
-      tagsList,
-      activeTag
-    }
-  },
-  methods: {
-    getCardImage(article) {
-      const imagePath = article.img
-      return `url(${imagePath})`
-    },
-    getCardDescription(article) {
-      if (article.description.length > 290) {
-        return `${article.description.substring(0, 290)}...`
-      }
-      return article.description
-    },
-    goToArticle(article) {
-      const articleUrl = `/blog/${article.slug}`
-      this.$router.push(articleUrl)
-    },
-    formatDate(date) {
-      const options = { year: 'numeric', month: 'long', day: 'numeric' }
-
-      if (date) {
-        return new Date(date).toLocaleDateString('pt', options)
-      }
-      return new Date().toLocaleDateString('pt', options)
-    },
-    async fetchArticlesByTag(searchTag) {
-      this.articles = await this.$content('articles')
-      .only(['title', 'description', 'img', 'slug', 'publishDate', 'tag'])
-      .where({ tag: searchTag })
-      .sortBy('publishDate', 'desc')
-      .fetch()
-
-      this.activeTag = searchTag
-    },
-    async fetchAllArticles() {
-      this.articles = await this.$content('articles')
-      .only(['title', 'description', 'img', 'slug', 'publishDate', 'tag'])
-      .sortBy('publishDate', 'desc')
-      .fetch()
-
-      this.activeTag = ''
-    }
+const getTagClasses = (tag: string) => {
+  if (tag === activeTag.value) {
+    return 'bg-primary-500 text-white'
   }
+  return 'text-primary-500'
+}
+
+const toggleActiveTag = async (tag: string) => {
+  if (tag === 'Todos') {
+    posts.value = await queryContent<PostContent>().sort({ publishDate: -1 }).find()
+  } else {
+    posts.value = await queryContent<PostContent>()
+      .where({ tag: { $eq: tag } })
+      .sort({ publishDate: -1 })
+      .find()
+  }
+  activeTag.value = tag
 }
 </script>
 
-<style scoped>
-.page {
-  display: flex;
-  flex-direction: column;
-  margin-top: 52px;
-}
+<template>
+  <div>
+    <header class="z-20 flex w-full flex-col-reverse px-8 pt-2 md:flex-row">
+      <div class="mt-4 md:mt-40">
+        <h2 class="text-2xl text-dark-purple-500 md:text-4xl">
+          Um Blog voltado para a comunidade dev
+        </h2>
 
-.page__banner {
-  width: 100%;
-  height: 44vh;
-  background: url('/Banner_home.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-}
+        <p class="text-md my-3 text-black-400 md:my-8 md:text-lg">
+          Bem vindo(a) ao Blog Papo Digital! <br />
+          Aqui você terá acesso a informações e tutoriais sobre tecnologia, programação e boas dicas
+          sobre Carreira Tech
+        </p>
+      </div>
 
-.page__tags {
-  width: 94%;
-  display: flex;
-  flex-direction: row;
-  padding: 20px 24px 0 24px;
-  flex-wrap: wrap;
-}
+      <img src="/undraw_In_the_office.png" alt="" class="mx-auto w-10/12 md:w-5/12" />
+    </header>
 
-.tag {
-  padding: 12px 16px;
-  font-size: 1rem;
-  border-radius: 6px;
-  background: #3B97D3;
-  color: #fff;
-  transition: 0.3s ease-in-out;
-  margin: 8px 8px 8px 0;
-}
-.tag:hover {
-  background: #52BA9B;
-  color: #fafafa;
-  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
-  cursor: pointer;
-}
-.tag--active {
-  background: #52BA9B;
-  color: #fafafa;
-}
+    <!-- ===== search bar container ===== -->
+    <section class="flex w-full flex-col items-center px-8 py-4 md:py-2 md:px-40">
+      <search-bar />
 
-.page__content {
-  display: flex;
-  flex-wrap: wrap;
-}
+      <!-- ===== tags container ===== -->
+      <div class="w-full py-1">
+        <button
+          type="button"
+          v-for="tag in tagsList"
+          :key="tag"
+          class="mx-2 my-2 inline-block rounded-xl border border-primary-500 px-2 py-1 text-xs transition-all duration-200 hover:bg-primary-500 hover:text-white hover:shadow-lg md:px-3 md:text-sm"
+          :class="getTagClasses(tag)"
+          @click="toggleActiveTag(tag)"
+        >
+          {{ tag }}
+        </button>
+      </div>
+    </section>
 
-.card {
-  position: relative;
-  width: 30.6%;
-  margin: 24px;
-	height: 380px;
-  border: 1px solid #ededed;
-  border-radius: 6px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.25);
-  transition: 0.3s;
-  outline: none;
-  text-decoration: none;
-}
-.card:hover {
-  border: 1px solid #52BA9B;
-  box-shadow: 1px 4px 6px #52BA9B;
-  cursor: pointer;
-}
-.card__image {
-  width: 100%;
-  height: 45%;
-  border-radius: 6px 6px 0 0;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: top;
-}
-.card__body {
-  padding: 10px;
-}
-.card__body h2 {
-  color: rgba(0, 0, 0, 0.80);
-}
-.card__body p {
-  color: rgba(0, 0, 0, 0.70);
-}
-.card__footer {
-  position: absolute;
-  left: 10px;
-  bottom: 10px;
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.70);
-  width: 95%;
-  display: flex;
-  justify-content: space-between;
-}
-.card__publish-date {
-  margin-top: 4px;
-}
-.card__tag {
-  padding: 4px 10px;
-  font-size: 0.7rem;
-  border-radius: 6px;
-  background: #3B97D3;
-  color: #fff;
-}
+    <!-- ===== posts list ===== -->
+    <section class="flex w-full flex-col gap-6 px-8 pt-6 pb-2">
+      <article
+        v-for="post in posts"
+        :key="post._path"
+        class="group flex h-96 w-full flex-col gap-1 rounded-xl border border-gray-100 shadow-xl transition-all duration-150 hover:cursor-pointer hover:border hover:border-gray-100 hover:shadow-xl md:h-80 md:flex-row md:gap-4 md:border-0 md:shadow-transparent"
+        @click="openPost(post._path)"
+      >
+        <div
+          :style="{ backgroundImage: `url(/post-cover/${post.cover})` }"
+          class="h-44 w-full rounded-tl-xl rounded-tr-xl bg-cover bg-top bg-no-repeat md:h-auto md:w-4/12 md:rounded-xl"
+        ></div>
 
-.page__text {
-  display: none;
-}
+        <div class="relative flex w-full flex-col py-2 px-2 md:w-8/12 md:px-0">
+          <span class="mb-1 text-xs text-midnight-500 md:text-lg">{{ post.tag }}</span>
+          <h3 class="text-sm font-semibold group-hover:text-primary-500 md:text-3xl">
+            {{ post.title }}
+          </h3>
 
-@media screen and (min-width: 1441px) and (max-width: 1930px) {
-  .tag {
-    margin: 6px;
-  }
-  .card {
-    width: 29.9%;
-    height: 445px;
-  }
-  .card__body h2 {
-    font-size: 20px;
-  }
-  .card__body p {
-    font-size: 16px;
-  }
-}
-
-@media screen and (min-width: 1025px) and (max-width: 1440px) {
-  .page__banner {
-    height: 42vh;
-  }
-  .tag {
-    margin: 6px;
-    padding: 12px 16px;
-    font-size: 1rem;
-  }
-  .card {
-    width: 29.8%;
-  }
-  .card__body h2 {
-    font-size: 18px;
-  }
-  .card__body p {
-    font-size: 14px;
-  }
-}
-
-@media screen and (min-width: 769px) and (max-width: 1024px) {
-  .page__banner {
-    height: 37vh;
-  }
-  .tag {
-    margin: 6px;
-    padding: 8px 16px;
-    font-size: 1rem;
-  }
-  .card {
-    width: 45%;
-  }
-  .card__body h2 {
-    font-size: 15px;
-  }
-  .card__body p {
-    font-size: 13px;
-  }
-}
-
-@media screen and (min-width: 426px) and (max-width: 768px) {
-  .page__banner {
-    height: 37vh;
-  }
-  .tag {
-    margin: 4px;
-    padding: 7px 14px;
-    font-size: 1rem;
-  }
-  .card {
-    width: 43.4%;
-  }
-  .card__body h2 {
-    font-size: 15px;
-  }
-  .card__body p {
-    font-size: 13px;
-  }
-}
-
-@media screen and (max-width: 425px) {
-  .page__banner {
-    height: 30vh;
-  }
-  .page__tags {
-    width: 89%;
-  }
-  .tag {
-    margin: 4px;
-    padding: 6px 12px;
-    font-size: 1rem;
-  }
-  .card {
-    width: 87.7%;
-  }
-  .card__body h2 {
-    font-size: 16px;
-  }
-  .card__body p {
-    font-size: 13px;
-  }
-}
-</style>
+          <p
+            class="my-4 h-24 overflow-y-hidden text-ellipsis text-xs text-black-400 md:h-36 md:text-lg"
+          >
+            {{ post.description }}
+          </p>
+          <span class="absolute bottom-3 left-2 text-xs text-black-400 md:left-0 md:text-lg">{{
+            formatPublishDate(post.publishDate)
+          }}</span>
+        </div>
+      </article>
+    </section>
+  </div>
+</template>
