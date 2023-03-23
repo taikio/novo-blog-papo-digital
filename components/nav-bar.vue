@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const route = useRoute()
-const isABlogRoute = computed(() => route.path === '/' || route.path.startsWith('/blog/'))
+const isABlogRoute = computed(
+  () => route.path === '/' || route.path.startsWith('/blog/')
+)
 </script>
 
 <template>
@@ -29,6 +31,13 @@ const isABlogRoute = computed(() => route.path === '/' || route.path.startsWith(
         class="text-md hidden cursor-pointer text-black-400 transition-all duration-150 hover:text-primary-500 md:inline-block"
       >
         Gerador de CPF
+      </NuxtLink>
+
+      <NuxtLink
+        to="/gerador-cnpj"
+        class="text-md hidden cursor-pointer text-black-400 transition-all duration-150 hover:text-primary-500 md:inline-block"
+      >
+        Gerador de CNPJ
       </NuxtLink>
 
       <a
