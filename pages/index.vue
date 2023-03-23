@@ -14,11 +14,14 @@ useHead({
 })
 
 const { data: posts } = await useAsyncData('posts', () => {
-  return queryContent<PostContent>().sort({ publishDate: -1 }).find()
+  return queryContent<PostContent>()
+    .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
+    .sort({ publishDate: -1 })
+    .find()
 })
 
 onMounted(() => {
-  const postsTags = posts.value?.map(post => post.tag).sort() ?? []
+  const postsTags = posts.value?.map((post) => post.tag).sort() ?? []
   postsTags.unshift('Todos')
   tagsList.value = Array.from(new Set(postsTags))
 })
@@ -40,10 +43,14 @@ const getTagClasses = (tag: string) => {
 
 const toggleActiveTag = async (tag: string) => {
   if (tag === 'Todos') {
-    posts.value = await queryContent<PostContent>().sort({ publishDate: -1 }).find()
+    posts.value = await queryContent<PostContent>()
+      .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
+      .sort({ publishDate: -1 })
+      .find()
   } else {
     posts.value = await queryContent<PostContent>()
       .where({ tag: { $eq: tag } })
+      .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
       .sort({ publishDate: -1 })
       .find()
   }
@@ -61,16 +68,22 @@ const toggleActiveTag = async (tag: string) => {
 
         <p class="text-md my-3 text-black-400 md:my-8 md:text-lg">
           Bem vindo(a) ao Blog Papo Digital! <br />
-          Aqui você terá acesso a informações e tutoriais sobre tecnologia, programação e boas dicas
-          sobre Carreira Tech
+          Aqui você terá acesso a informações e tutoriais sobre tecnologia,
+          programação e boas dicas sobre Carreira Tech
         </p>
       </div>
 
-      <img src="/undraw_In_the_office.png" alt="" class="mx-auto w-10/12 md:w-5/12" />
+      <img
+        src="/undraw_In_the_office.png"
+        alt=""
+        class="mx-auto w-10/12 md:w-5/12"
+      />
     </header>
 
     <!-- ===== search bar container ===== -->
-    <section class="flex w-full flex-col items-center px-8 py-4 md:py-2 md:px-40">
+    <section
+      class="flex w-full flex-col items-center px-8 py-4 md:py-2 md:px-40"
+    >
       <search-bar />
 
       <!-- ===== tags container ===== -->
@@ -102,8 +115,12 @@ const toggleActiveTag = async (tag: string) => {
         ></div>
 
         <div class="relative flex w-full flex-col py-2 px-2 md:w-8/12 md:px-0">
-          <span class="mb-1 text-xs text-midnight-500 md:text-lg">{{ post.tag }}</span>
-          <h3 class="text-sm font-semibold group-hover:text-primary-500 md:text-3xl">
+          <span class="mb-1 text-xs text-midnight-500 md:text-lg">{{
+            post.tag
+          }}</span>
+          <h3
+            class="text-sm font-semibold group-hover:text-primary-500 md:text-3xl"
+          >
             {{ post.title }}
           </h3>
 
@@ -112,9 +129,10 @@ const toggleActiveTag = async (tag: string) => {
           >
             {{ post.description }}
           </p>
-          <span class="absolute bottom-3 left-2 text-xs text-black-400 md:left-0 md:text-lg">{{
-            formatPublishDate(post.publishDate)
-          }}</span>
+          <span
+            class="absolute bottom-3 left-2 text-xs text-black-400 md:left-0 md:text-lg"
+            >{{ formatPublishDate(post.publishDate) }}</span
+          >
         </div>
       </article>
     </section>
