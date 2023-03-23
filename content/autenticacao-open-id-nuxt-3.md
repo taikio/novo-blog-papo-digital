@@ -398,4 +398,6 @@ const services = useServices()
 const posts = await services.$application.getPosts()
 ```
 
+Se quiser ter acesso ao código completo deste tutorial, é só acessar o repositório do projeto no Github através [Deste Link](https://github.com/taikio/nuxt-3-oidc-auth).
+
 E assim chegamos ao fim deste tutorial, espero que tenha gostado ;)
