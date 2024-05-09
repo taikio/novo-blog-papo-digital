@@ -1,6 +1,6 @@
-import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
+import type { MarkdownParsedContent } from '@nuxt/content/dist/runtime/types'
 
-export interface PostContent extends ParsedContent {
+export interface PostContent extends MarkdownParsedContent {
   lowercaseTitle: string // used in search functionality
   cover: string // post cover image
   coverAlt: string // alternative text to cover image

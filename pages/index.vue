@@ -2,7 +2,7 @@
 import generateMeta from '@/utils/generateMeta'
 import SearchBar from '@/components/search-bar.vue'
 import { formatDate } from '@/utils/datetime'
-import { PostContent } from '@/types/post-content'
+import type { PostContent } from '@/models/post-content'
 
 const router = useRouter()
 const activeTag = ref('Todos')
@@ -82,7 +82,7 @@ const toggleActiveTag = async (tag: string) => {
 
     <!-- ===== search bar container ===== -->
     <section
-      class="flex w-full flex-col items-center px-8 py-4 md:py-2 md:px-40"
+      class="flex w-full flex-col items-center px-8 py-4 md:px-40 md:py-2"
     >
       <search-bar />
 
@@ -102,7 +102,7 @@ const toggleActiveTag = async (tag: string) => {
     </section>
 
     <!-- ===== posts list ===== -->
-    <section class="flex w-full flex-col gap-6 px-8 pt-6 pb-2">
+    <section class="flex w-full flex-col gap-6 px-8 pb-2 pt-6">
       <article
         v-for="post in posts"
         :key="post._path"
@@ -114,7 +114,7 @@ const toggleActiveTag = async (tag: string) => {
           class="h-44 w-full rounded-tl-xl rounded-tr-xl bg-cover bg-top bg-no-repeat md:h-auto md:w-4/12 md:rounded-xl"
         ></div>
 
-        <div class="relative flex w-full flex-col py-2 px-2 md:w-8/12 md:px-0">
+        <div class="relative flex w-full flex-col px-2 py-2 md:w-8/12 md:px-0">
           <span class="mb-1 text-xs text-midnight-500 md:text-lg">{{
             post.tag
           }}</span>
@@ -138,3 +138,4 @@ const toggleActiveTag = async (tag: string) => {
     </section>
   </div>
 </template>
+~/models/post-content

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { PostContent } from '@/types/post-content'
+import type { PostContent } from '@/models/post-content'
 const isSuggestionsVisible = ref(false)
 const outsideClickListener = ref<EventListener | null>(null)
 const searchQuery = ref('')
@@ -59,7 +59,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="relative w-full">
-    <span class="absolute top-[0.60rem] left-3 md:top-[0.82rem]">
+    <span class="absolute left-3 top-[0.60rem] md:top-[0.82rem]">
       <Icon
         name="feather:search"
         class="duration-50 text-lg text-black-400 transition-all md:text-2xl"
@@ -77,10 +77,14 @@ onBeforeUnmount(() => {
       @input="applySearchDebouced"
     />
 
-    <Transition name="suggestions__overlay" @enter="onOverlayEnter" @leave="onOverlayLeave">
+    <Transition
+      name="suggestions__overlay"
+      @enter="onOverlayEnter"
+      @leave="onOverlayLeave"
+    >
       <div
         v-if="isSuggestionsVisible"
-        class="b-gray-500 duration-50 absolute top-9 left-0 z-10 mt-2 h-40 max-h-96 w-full divide-y divide-solid overflow-auto rounded-xl border bg-white p-3 shadow-lg transition-all md:top-14 md:p-4"
+        class="b-gray-500 duration-50 absolute left-0 top-9 z-10 mt-2 h-40 max-h-96 w-full divide-y divide-solid overflow-auto rounded-xl border bg-white p-3 shadow-lg transition-all md:top-14 md:p-4"
       >
         <div
           v-for="post in searchResult"
@@ -94,3 +98,4 @@ onBeforeUnmount(() => {
     </Transition>
   </div>
 </template>
+~/models/post-content
