@@ -4,7 +4,7 @@ lowercaseTitle: descobrindo as dimensões de um elemento html com javascript
 description: Quando desenvolvemos páginas web, é comum precisar de informações sobre o tamanho de elementos HTML para ajustar a posição dos elementos de forma dinâmica. Neste post eu vou te mostrar algumas maneiras de pegar as dimensões de um elemento através do javascript.
 cover: cover_post_descobrindo_dimensoes_elemento_com_javascript.png
 coverAlt: Descobrindo as Dimensões de um Elemento HTML com JavaScript
-publishDate: 2023-08-17T14:30:00.003Z
+publishDate: 2024-08-17T14:30:00.003Z
 tag: Javascript
 ---
 

@@ -4,7 +4,7 @@ lowercaseTitle: gerenciamento de estado no nuxt 3 com pinia
 description: Se você está desenvolvendo uma aplicação com Nuxt 3, o gerenciamento de estado é uma parte crucial para manter a consistência dos dados. Neste post, vou te mostrar como configurar o Pinia no Nuxt 3 e gerenciar o estado de forma eficiente.
 cover: cover_post_gerenciamento_estado_nuxt.png
 coverAlt: Gerenciamento de Estado no Nuxt 3 com Pinia
-publishDate: 2023-08-23T14:30:00.003Z
+publishDate: 2024-08-23T14:30:00.003Z
 tag: NuxtJS
 ---
 
