@@ -106,7 +106,7 @@ const toggleActiveTag = async (tag: string) => {
       <article
         v-for="post in posts"
         :key="post._path"
-        class="group flex h-96 w-full flex-col gap-1 rounded-xl border border-gray-100 shadow-xl transition-all duration-150 hover:cursor-pointer hover:border hover:border-gray-100 hover:shadow-xl md:h-80 md:flex-row md:gap-4 md:border-0 md:shadow-transparent"
+        class="group flex h-96 w-full flex-col gap-1 rounded-xl border border-gray-100 transition-all duration-150 hover:cursor-pointer hover:shadow-xl md:h-80 md:flex-row md:gap-4"
         @click="openPost(post._path)"
       >
         <div

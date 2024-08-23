@@ -84,7 +84,7 @@ onBeforeUnmount(() => {
     >
       <div
         v-if="isSuggestionsVisible"
-        class="b-gray-500 duration-50 absolute left-0 top-9 z-10 mt-2 h-40 max-h-96 w-full divide-y divide-solid overflow-auto rounded-xl border bg-white p-3 shadow-lg transition-all md:top-14 md:p-4"
+        class="b-gray-500 duration-50 absolute left-0 top-9 z-10 mt-2 h-64 w-full divide-y divide-solid overflow-auto rounded-xl border bg-white p-3 shadow-lg transition-all md:top-14 md:p-4"
       >
         <div
           v-for="post in searchResult"
