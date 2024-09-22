@@ -6,7 +6,7 @@ const inputCnpj = ref('')
 const generateWithPoints = ref(false)
 const nuxtApp = useNuxtApp()
 
-const pageTitle = 'Papo Digital | Gerador de CNPJ'
+const pageTitle = 'Gerador de CNPJ | Papo Digital'
 const pageDescription = `Este gerador de CNPJ tem como objetivo auxiliar programadores, estudantes e
           testadores a gerar CNPJs válidos para utilização em testes de softwares em desenvolvimento.`
 const pageUrl = 'https://papodigital.net.br/gerador-cnpj'

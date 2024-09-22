@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@brazilian-utils/brazilian-utils": "^1.0.0-rc.12",
+    "qr-code-styling": "^1.6.0-rc.1",
     "vue-toastification": "^2.0.0-rc.5"
   }
 }
