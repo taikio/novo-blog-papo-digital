@@ -6,7 +6,7 @@ const inputCpf = ref('')
 const generateWithPoints = ref(false)
 const nuxtApp = useNuxtApp()
 
-const pageTitle = 'Papo Digital | Gerador de CPF'
+const pageTitle = 'Gerador de CPF | Papo Digital'
 const pageDescription = `Este gerador de CPF tem como objetivo auxiliar programadores, estudantes e
           testadores a gerar CPFs válidos para utilização em testes de softwares em desenvolvimento.`
 const pageUrl = 'https://papodigital.net.br/gerador-cpf'
