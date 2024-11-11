@@ -4,7 +4,7 @@ lowercaseTitle: testando aplicações nuxt 3 com vitest
 description: O Nuxt 3, por ser um framework mais opinativo, traz algumas particularidades em relação à configuração de ferramentas como o Vitest. Neste post, vou te mostrar como configurar e realizar testes em uma aplicação Nuxt 3 usando o Vitest, uma ferramenta de testes rápida e simples baseada no Vite.
 cover: cover_post_vitest_nuxt_3.png
 coverAlt: Testando aplicações Nuxt 3 com Vitest
-publishDate: 2024-11-08T14:30:00.003Z
+publishDate: 2024-11-11T14:30:00.003Z
 tag: NuxtJS
 ---
 
@@ -141,6 +141,9 @@ acionado por uma Pipeline de CI.
 A configuração do Vitest em uma aplicação Nuxt 3 é bastante simples graças ao módulo `@nuxt/test-utils` que já fornece as configurações necessárias. 
 Seguindo este tutorial, você já pode começar a testar seus componentes de forma eficiente e rápida. 
 O Vitest oferece uma performance incrível e, por ser semelhante ao Jest, é fácil de usar para quem já tem experiência com testes unitários.
+
+Se quiser se aprofundar mais neste assunto, sugiro que dê uma conferida na [Documentação do Nuxt](https://nuxt.com/docs/getting-started/testing)
+e também na [Documentação do Vitest](https://vitest.dev/guide/)
 
 Agora é sua vez de explorar o poder do Vitest nos seus projetos Nuxt 3!
 
