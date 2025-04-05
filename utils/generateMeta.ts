@@ -1,4 +1,4 @@
-import { metaTags } from './types'
+import { type metaTags } from './types'
 
 export default (overrides?: metaTags) => {
   const defaultMeta: metaTags = {
@@ -17,7 +17,8 @@ export default (overrides?: metaTags) => {
     twitterTitle: 'Blog Papo Digital',
     twitterDescription:
       'Bem vindo(a) ao Blog Papo Digital! Aqui você terá acesso a informações e tutoriais sobre tecnologia, programação e boas dicas sobre Carreira Tech',
-    twitterSocialBanner: 'https://www.papodigital.net.br/banner_social_media.png',
+    twitterSocialBanner:
+      'https://www.papodigital.net.br/banner_social_media.png',
   }
 
   const generatedMeta: metaTags = { ...defaultMeta, ...overrides }

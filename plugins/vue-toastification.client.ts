@@ -1,4 +1,8 @@
-import Toast, { PluginOptions, POSITION, useToast } from 'vue-toastification'
+import Toast, {
+  type PluginOptions,
+  POSITION,
+  useToast,
+} from 'vue-toastification'
 // Import the CSS or use your own!
 import 'vue-toastification/dist/index.css'
 
@@ -17,7 +21,7 @@ const options: PluginOptions = {
   rtl: false,
 }
 
-export default defineNuxtPlugin(nuxtApp => {
+export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use(Toast, options)
 
   return {
