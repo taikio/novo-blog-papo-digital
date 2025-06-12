@@ -8,6 +8,13 @@ const router = useRouter()
 const activeTag = ref('Todos')
 const tagsList = ref([''])
 
+// Add these new reactive variables
+const currentPage = ref(1)
+const postsPerPage = ref(5)
+const isLoading = ref(false)
+const allPostsLoaded = ref(false)
+// End of new variables
+
 useHead({
   title: 'Blog Papo Digital',
   meta: generateMeta(),
@@ -17,18 +24,81 @@ const { data: posts } = await useAsyncData('posts', () => {
   return queryContent<PostContent>()
     .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
     .sort({ publishDate: -1 })
+    .limit(5) // Added limit here
     .find()
 })
+
+const handleScroll = () => {
+  // Check if posts ref and its value exist
+  if (!posts.value) return;
+
+  const offset = 100; // Trigger load more when 100px from the bottom
+  const bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight - offset;
+
+  if (bottomOfWindow && !isLoading.value && !allPostsLoaded.value) {
+    loadMorePosts();
+  }
+};
 
 onMounted(() => {
   const postsTags = posts.value?.map((post) => post.tag).sort() ?? []
   postsTags.unshift('Todos')
   tagsList.value = Array.from(new Set(postsTags))
+
+  window.addEventListener('scroll', handleScroll); // Added event listener
 })
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
 
 const formatPublishDate = (publishDate: Date) => {
   return formatDate(publishDate)
 }
+
+const loadMorePosts = async () => {
+  if (isLoading.value || allPostsLoaded.value) return;
+
+  isLoading.value = true;
+
+  // We want to load the page *after* the current one.
+  // So, if currentPage.value is 1, we are fetching posts for page 2.
+  // The items to skip are those from page 1.
+  // Skip = currentPage.value * postsPerPage.value
+  const postsToSkip = currentPage.value * postsPerPage.value;
+
+  let query = queryContent<PostContent>()
+    .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
+    .sort({ publishDate: -1 })
+    .skip(postsToSkip)
+    .limit(postsPerPage.value);
+
+  if (activeTag.value !== 'Todos' && activeTag.value) {
+    query = query.where({ tag: { $eq: activeTag.value } });
+  }
+
+  try {
+    const newPosts = await query.find();
+
+    if (newPosts && newPosts.length > 0) {
+      if (posts.value) {
+        posts.value.push(...newPosts);
+        currentPage.value++; // Increment current page *after* successful fetch
+      } else {
+        // This case should ideally not be hit if initial posts are loaded correctly
+        posts.value = newPosts;
+        currentPage.value++; // Still increment as we've loaded a page
+      }
+    } else {
+      allPostsLoaded.value = true; // No more posts found
+    }
+  } catch (error) {
+    console.error("Error fetching more posts:", error);
+    // Potentially set an error ref here to display to the user
+  } finally {
+    isLoading.value = false;
+  }
+};
 
 const openPost = (postPath: string) => {
   router.push(`/blog${postPath}`)
@@ -42,20 +112,36 @@ const getTagClasses = (tag: string) => {
 }
 
 const toggleActiveTag = async (tag: string) => {
-  if (tag === 'Todos') {
-    posts.value = await queryContent<PostContent>()
-      .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
-      .sort({ publishDate: -1 })
-      .find()
-  } else {
-    posts.value = await queryContent<PostContent>()
-      .where({ tag: { $eq: tag } })
-      .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
-      .sort({ publishDate: -1 })
-      .find()
+  activeTag.value = tag;
+  currentPage.value = 1; // Reset to page 1
+  allPostsLoaded.value = false; // Reset all posts loaded flag
+  isLoading.value = true; // Indicate loading
+
+  let query = queryContent<PostContent>()
+    .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
+    .sort({ publishDate: -1 })
+    .limit(postsPerPage.value); // Load only the first page
+
+  if (tag !== 'Todos') {
+    query = query.where({ tag: { $eq: tag } });
   }
-  activeTag.value = tag
-}
+
+  try {
+    const newPosts = await query.find();
+    posts.value = newPosts; // Replace current posts
+
+    // If the number of posts fetched is less than postsPerPage,
+    // it means all posts for this tag have been loaded.
+    if (newPosts.length < postsPerPage.value) {
+      allPostsLoaded.value = true;
+    }
+  } catch (error) {
+    console.error("Error toggling active tag:", error);
+    posts.value = []; // Clear posts on error or handle appropriately
+  } finally {
+    isLoading.value = false; // Reset loading state
+  }
+};
 </script>
 
 <template>
@@ -136,6 +222,16 @@ const toggleActiveTag = async (tag: string) => {
         </div>
       </article>
     </section>
+
+    <!-- ===== Loading Indicator ===== -->
+    <div v-if="isLoading" class="flex justify-center py-4">
+      <p class="text-lg text-gray-500">Carregando mais posts...</p>
+    </div>
+
+    <!-- Optional: "No more posts" message -->
+    <div v-if="allPostsLoaded && !isLoading" class="flex justify-center py-4">
+      <p class="text-lg text-gray-500">Você chegou ao fim!</p>
+    </div>
   </div>
 </template>
 ~/models/post-content
