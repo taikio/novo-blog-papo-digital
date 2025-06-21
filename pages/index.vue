@@ -3,17 +3,17 @@ import generateMeta from '@/utils/generateMeta'
 import SearchBar from '@/components/search-bar.vue'
 import { formatDate } from '@/utils/datetime'
 import type { PostContent } from '@/models/post-content'
+import { useInfiniteScroll } from '@/composables/useInfiniteScroll'
 
 const router = useRouter()
 const activeTag = ref('Todos')
 const tagsList = ref([''])
 
-// Add these new reactive variables
 const currentPage = ref(1)
 const postsPerPage = ref(5)
 const isLoading = ref(false)
 const allPostsLoaded = ref(false)
-// End of new variables
+const sentinel = ref<HTMLElement | null>(null)
 
 useHead({
   title: 'Blog Papo Digital',
@@ -24,81 +24,63 @@ const { data: posts } = await useAsyncData('posts', () => {
   return queryContent<PostContent>()
     .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
     .sort({ publishDate: -1 })
-    .limit(5) // Added limit here
+    .limit(5)
     .find()
 })
 
-const handleScroll = () => {
-  // Check if posts ref and its value exist
-  if (!posts.value) return;
-
-  const offset = 100; // Trigger load more when 100px from the bottom
-  const bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight - offset;
-
-  if (bottomOfWindow && !isLoading.value && !allPostsLoaded.value) {
-    loadMorePosts();
-  }
-};
-
-onMounted(() => {
-  const postsTags = posts.value?.map((post) => post.tag).sort() ?? []
-  postsTags.unshift('Todos')
-  tagsList.value = Array.from(new Set(postsTags))
-
-  window.addEventListener('scroll', handleScroll); // Added event listener
+const { data: tagsData } = await useAsyncData('categories', () => {
+  return queryContent<PostContent>()
+    .only(['tag'])
+    .sort({ publishDate: -1 })
+    .find()
 })
 
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-});
+const postsTags = tagsData.value?.map((tagData) => tagData.tag).sort() ?? []
+postsTags.unshift('Todos')
+tagsList.value = Array.from(new Set(postsTags))
 
 const formatPublishDate = (publishDate: Date) => {
   return formatDate(publishDate)
 }
 
 const loadMorePosts = async () => {
-  if (isLoading.value || allPostsLoaded.value) return;
+  if (isLoading.value || allPostsLoaded.value) return
 
-  isLoading.value = true;
-
-  // We want to load the page *after* the current one.
-  // So, if currentPage.value is 1, we are fetching posts for page 2.
-  // The items to skip are those from page 1.
-  // Skip = currentPage.value * postsPerPage.value
-  const postsToSkip = currentPage.value * postsPerPage.value;
+  isLoading.value = true
+  const postsToSkip = currentPage.value * postsPerPage.value
 
   let query = queryContent<PostContent>()
     .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
     .sort({ publishDate: -1 })
     .skip(postsToSkip)
-    .limit(postsPerPage.value);
+    .limit(postsPerPage.value)
 
   if (activeTag.value !== 'Todos' && activeTag.value) {
-    query = query.where({ tag: { $eq: activeTag.value } });
+    query = query.where({ tag: { $eq: activeTag.value } })
   }
 
   try {
-    const newPosts = await query.find();
+    const newPosts = await query.find()
 
     if (newPosts && newPosts.length > 0) {
       if (posts.value) {
-        posts.value.push(...newPosts);
-        currentPage.value++; // Increment current page *after* successful fetch
+        posts.value.push(...newPosts)
+        currentPage.value++
       } else {
-        // This case should ideally not be hit if initial posts are loaded correctly
-        posts.value = newPosts;
-        currentPage.value++; // Still increment as we've loaded a page
+        posts.value = newPosts
+        currentPage.value++
       }
     } else {
-      allPostsLoaded.value = true; // No more posts found
+      allPostsLoaded.value = true
     }
   } catch (error) {
-    console.error("Error fetching more posts:", error);
-    // Potentially set an error ref here to display to the user
+    console.error('Error fetching more posts:', error)
   } finally {
-    isLoading.value = false;
+    isLoading.value = false
   }
-};
+}
+
+useInfiniteScroll(sentinel, loadMorePosts)
 
 const openPost = (postPath: string) => {
   router.push(`/blog${postPath}`)
@@ -112,36 +94,34 @@ const getTagClasses = (tag: string) => {
 }
 
 const toggleActiveTag = async (tag: string) => {
-  activeTag.value = tag;
-  currentPage.value = 1; // Reset to page 1
-  allPostsLoaded.value = false; // Reset all posts loaded flag
-  isLoading.value = true; // Indicate loading
+  activeTag.value = tag
+  currentPage.value = 1
+  allPostsLoaded.value = false
+  isLoading.value = true
 
   let query = queryContent<PostContent>()
     .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
     .sort({ publishDate: -1 })
-    .limit(postsPerPage.value); // Load only the first page
+    .limit(postsPerPage.value)
 
   if (tag !== 'Todos') {
-    query = query.where({ tag: { $eq: tag } });
+    query = query.where({ tag: { $eq: tag } })
   }
 
   try {
-    const newPosts = await query.find();
-    posts.value = newPosts; // Replace current posts
+    const newPosts = await query.find()
+    posts.value = newPosts
 
-    // If the number of posts fetched is less than postsPerPage,
-    // it means all posts for this tag have been loaded.
     if (newPosts.length < postsPerPage.value) {
-      allPostsLoaded.value = true;
+      allPostsLoaded.value = true
     }
   } catch (error) {
-    console.error("Error toggling active tag:", error);
-    posts.value = []; // Clear posts on error or handle appropriately
+    console.error('Error toggling active tag:', error)
+    posts.value = []
   } finally {
-    isLoading.value = false; // Reset loading state
+    isLoading.value = false
   }
-};
+}
 </script>
 
 <template>
@@ -222,6 +202,7 @@ const toggleActiveTag = async (tag: string) => {
         </div>
       </article>
     </section>
+    <div ref="sentinel" class="h-1"></div>
 
     <!-- ===== Loading Indicator ===== -->
     <div v-if="isLoading" class="flex justify-center py-4">
@@ -234,4 +215,3 @@ const toggleActiveTag = async (tag: string) => {
     </div>
   </div>
 </template>
-~/models/post-content
