@@ -3,10 +3,17 @@ import generateMeta from '@/utils/generateMeta'
 import SearchBar from '@/components/search-bar.vue'
 import { formatDate } from '@/utils/datetime'
 import type { PostContent } from '@/models/post-content'
+import { useInfiniteScroll } from '@/composables/useInfiniteScroll'
 
 const router = useRouter()
 const activeTag = ref('Todos')
 const tagsList = ref([''])
+
+const currentPage = ref(1)
+const postsPerPage = ref(5)
+const isLoading = ref(false)
+const allPostsLoaded = ref(false)
+const sentinel = ref<HTMLElement | null>(null)
 
 useHead({
   title: 'Blog Papo Digital',
@@ -17,18 +24,63 @@ const { data: posts } = await useAsyncData('posts', () => {
   return queryContent<PostContent>()
     .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
     .sort({ publishDate: -1 })
+    .limit(5)
     .find()
 })
 
-onMounted(() => {
-  const postsTags = posts.value?.map((post) => post.tag).sort() ?? []
-  postsTags.unshift('Todos')
-  tagsList.value = Array.from(new Set(postsTags))
+const { data: tagsData } = await useAsyncData('categories', () => {
+  return queryContent<PostContent>()
+    .only(['tag'])
+    .sort({ publishDate: -1 })
+    .find()
 })
+
+const postsTags = tagsData.value?.map((tagData) => tagData.tag).sort() ?? []
+postsTags.unshift('Todos')
+tagsList.value = Array.from(new Set(postsTags))
 
 const formatPublishDate = (publishDate: Date) => {
   return formatDate(publishDate)
 }
+
+const loadMorePosts = async () => {
+  if (isLoading.value || allPostsLoaded.value) return
+
+  isLoading.value = true
+  const postsToSkip = currentPage.value * postsPerPage.value
+
+  let query = queryContent<PostContent>()
+    .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
+    .sort({ publishDate: -1 })
+    .skip(postsToSkip)
+    .limit(postsPerPage.value)
+
+  if (activeTag.value !== 'Todos' && activeTag.value) {
+    query = query.where({ tag: { $eq: activeTag.value } })
+  }
+
+  try {
+    const newPosts = await query.find()
+
+    if (newPosts && newPosts.length > 0) {
+      if (posts.value) {
+        posts.value.push(...newPosts)
+        currentPage.value++
+      } else {
+        posts.value = newPosts
+        currentPage.value++
+      }
+    } else {
+      allPostsLoaded.value = true
+    }
+  } catch (error) {
+    console.error('Error fetching more posts:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+useInfiniteScroll(sentinel, loadMorePosts)
 
 const openPost = (postPath: string) => {
   router.push(`/blog${postPath}`)
@@ -42,19 +94,33 @@ const getTagClasses = (tag: string) => {
 }
 
 const toggleActiveTag = async (tag: string) => {
-  if (tag === 'Todos') {
-    posts.value = await queryContent<PostContent>()
-      .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
-      .sort({ publishDate: -1 })
-      .find()
-  } else {
-    posts.value = await queryContent<PostContent>()
-      .where({ tag: { $eq: tag } })
-      .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
-      .sort({ publishDate: -1 })
-      .find()
-  }
   activeTag.value = tag
+  currentPage.value = 1
+  allPostsLoaded.value = false
+  isLoading.value = true
+
+  let query = queryContent<PostContent>()
+    .only(['_path', 'title', 'tag', 'cover', 'publishDate', 'description'])
+    .sort({ publishDate: -1 })
+    .limit(postsPerPage.value)
+
+  if (tag !== 'Todos') {
+    query = query.where({ tag: { $eq: tag } })
+  }
+
+  try {
+    const newPosts = await query.find()
+    posts.value = newPosts
+
+    if (newPosts.length < postsPerPage.value) {
+      allPostsLoaded.value = true
+    }
+  } catch (error) {
+    console.error('Error toggling active tag:', error)
+    posts.value = []
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>
 
@@ -136,6 +202,16 @@ const toggleActiveTag = async (tag: string) => {
         </div>
       </article>
     </section>
+    <div ref="sentinel" class="h-1"></div>
+
+    <!-- ===== Loading Indicator ===== -->
+    <div v-if="isLoading" class="flex justify-center py-4">
+      <p class="text-lg text-gray-500">Carregando mais posts...</p>
+    </div>
+
+    <!-- Optional: "No more posts" message -->
+    <div v-if="allPostsLoaded && !isLoading" class="flex justify-center py-4">
+      <p class="text-lg text-gray-500">Você chegou ao fim!</p>
+    </div>
   </div>
 </template>
-~/models/post-content
