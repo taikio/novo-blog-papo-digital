@@ -20,6 +20,13 @@ export default defineNuxtConfig({
       title: 'Blog Papo Digital',
       meta: generateMeta(),
       link: [{ rel: 'canonical', href: 'https://www.papodigital.net.br' }],
+      script: [
+        {
+          src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4727865344641486',
+          async: true,
+          crossorigin: 'anonymous',
+        },
+      ],
     },
   },
 
