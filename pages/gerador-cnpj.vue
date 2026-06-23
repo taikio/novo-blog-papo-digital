@@ -79,7 +79,7 @@ const copyToClipboard = () => {
       />
     </header>
 
-    <!-- ===== CPF generator container ===== -->
+    <!-- ===== CNPJ generator container ===== -->
     <section
       class="flex w-full flex-col items-center px-8 py-4 md:py-2 md:px-40"
     >
@@ -126,7 +126,7 @@ const copyToClipboard = () => {
           </div>
         </div>
 
-        <!-- ===== Button generate CPF ===== -->
+        <!-- ===== Button generate CNPJ ===== -->
         <button
           type="button"
           class="rounded-xl border border-primary-500 bg-primary-500 py-2 px-6 text-lg text-white transition-all duration-200 hover:shadow-lg md:px-3 md:text-xl"
@@ -157,6 +157,24 @@ const copyToClipboard = () => {
 
     <!-- ===== Page Description ===== -->
     <section class="mt-48 flex w-full flex-col gap-6 px-8">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4727865344641486"
+        crossorigin="anonymous"
+      ></script>
+      <!-- anúncio banner fino -->
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-client="ca-pub-4727865344641486"
+        data-ad-slot="5036362920"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+      <script>
+        ;(adsbygoogle = window.adsbygoogle || []).push({})
+      </script>
+
       <h2 class="text-xl text-black-500 md:text-2xl">
         Saiba mais sobre o algoritmo do CNPJ
       </h2>
