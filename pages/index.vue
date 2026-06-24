@@ -169,22 +169,7 @@ const toggleActiveTag = async (tag: string) => {
 
     <!-- ===== posts list ===== -->
     <section class="flex w-full flex-col gap-6 px-8 pb-2 pt-6">
-      <script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4727865344641486"
-        crossorigin="anonymous"
-      ></script>
-      <ins
-        class="adsbygoogle"
-        style="display: block"
-        data-ad-format="fluid"
-        data-ad-layout-key="-6u+db+4n-1r-5y"
-        data-ad-client="ca-pub-4727865344641486"
-        data-ad-slot="3534176629"
-      ></ins>
-      <script>
-        ;(adsbygoogle = window.adsbygoogle || []).push({})
-      </script>
+      <AdBanner ad-slot="3534176629" ad-layout-key="-6u+db+4n-1r-5y" />
 
       <article
         v-for="post in posts"

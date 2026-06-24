@@ -125,23 +125,7 @@ const copyToClipboard = () => {
 
     <!-- ===== Page Description ===== -->
     <section class="mt-48 flex w-full flex-col gap-6 px-8">
-      <script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4727865344641486"
-        crossorigin="anonymous"
-      ></script>
-      <!-- anúncio banner fino -->
-      <ins
-        class="adsbygoogle"
-        style="display: block"
-        data-ad-client="ca-pub-4727865344641486"
-        data-ad-slot="5036362920"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      ></ins>
-      <script>
-        ;(adsbygoogle = window.adsbygoogle || []).push({})
-      </script>
+      <AdBanner ad-slot="5036362920" />
 
       <h2 class="text-xl text-black-500 md:text-2xl">
         Saiba como são gerados os CPF`s
