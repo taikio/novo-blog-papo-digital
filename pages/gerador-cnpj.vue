@@ -28,13 +28,6 @@ useHead({
   meta: pageMetaTags,
 })
 
-const toggleGenerateWithPoints = () => {
-  generateWithPoints.value = !generateWithPoints.value
-}
-
-const toggleGenerateAlfa = () => {
-  generateAlfa.value = !generateAlfa.value
-}
 
 const { generate: generateCNPJAlfa } = useCnpjAlfa()
 
@@ -88,42 +81,10 @@ const copyToClipboard = () => {
       >
         <div class="flex w-full flex-col lg:flex-row lg:w-auto gap-2">
           <!-- ===== Checkbox generate alfa format ===== -->
-          <div
-            class="flex cursor-pointer items-center gap-4 rounded-md border py-2 px-4 hover:border-primary-500 hover:bg-primary-100"
-            :class="{
-              'border-primary-500 bg-primary-100 text-primary-500':
-                generateAlfa,
-              'text-black-400': !generateAlfa,
-            }"
-            @click="toggleGenerateAlfa()"
-          >
-            <Icon
-              :name="generateAlfa ? 'feather:check-square' : 'feather:square'"
-              class="text-lg"
-            />
-
-            <span class="text-lg md:text-xl">Formato Alfanumérico?</span>
-          </div>
+          <ToggleCheckbox v-model="generateAlfa" label="Formato Alfanumérico?" />
 
           <!-- ===== Checkbox generate with points ===== -->
-          <div
-            class="flex cursor-pointer items-center gap-4 rounded-md border py-2 px-4 hover:border-primary-500 hover:bg-primary-100"
-            :class="{
-              'border-primary-500 bg-primary-100 text-primary-500':
-                generateWithPoints,
-              'text-black-400': !generateWithPoints,
-            }"
-            @click="toggleGenerateWithPoints()"
-          >
-            <Icon
-              :name="
-                generateWithPoints ? 'feather:check-square' : 'feather:square'
-              "
-              class="text-lg"
-            />
-
-            <span class="text-lg md:text-xl">Gerar com Pontuação?</span>
-          </div>
+          <ToggleCheckbox v-model="generateWithPoints" label="Gerar com Pontuação?" />
         </div>
 
         <!-- ===== Button generate CNPJ ===== -->

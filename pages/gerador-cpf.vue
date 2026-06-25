@@ -26,9 +26,6 @@ useHead({
   meta: pageMetaTags,
 })
 
-const toggleGenerateWithPoints = () => {
-  generateWithPoints.value = !generateWithPoints.value
-}
 
 const generateNewCpf = () => {
   inputCpf.value = generateWithPoints.value
@@ -75,24 +72,7 @@ const copyToClipboard = () => {
         class="flex w-full flex-col gap-4 md:flex-row md:justify-between md:gap-0"
       >
         <!-- ===== Checkbox generate with points ===== -->
-        <div
-          class="flex cursor-pointer items-center gap-4 rounded-md border py-2 px-4 hover:border-primary-500 hover:bg-primary-100"
-          :class="{
-            'border-primary-500 bg-primary-100 text-primary-500':
-              generateWithPoints,
-            'text-black-400': !generateWithPoints,
-          }"
-          @click="toggleGenerateWithPoints()"
-        >
-          <Icon
-            :name="
-              generateWithPoints ? 'feather:check-square' : 'feather:square'
-            "
-            class="text-lg"
-          />
-
-          <span class="text-lg md:text-xl">Gerar com Pontuação?</span>
-        </div>
+        <ToggleCheckbox v-model="generateWithPoints" label="Gerar com Pontuação?" />
 
         <!-- ===== Button generate CPF ===== -->
         <PrimaryButton @click="generateNewCpf()">Gerar Novo CPF</PrimaryButton>
