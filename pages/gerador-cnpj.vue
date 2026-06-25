@@ -28,13 +28,6 @@ useHead({
   meta: pageMetaTags,
 })
 
-const toggleGenerateWithPoints = () => {
-  generateWithPoints.value = !generateWithPoints.value
-}
-
-const toggleGenerateAlfa = () => {
-  generateAlfa.value = !generateAlfa.value
-}
 
 const { generate: generateCNPJAlfa } = useCnpjAlfa()
 
@@ -48,36 +41,19 @@ const generateNewCnpj = () => {
   }
 }
 
-const copyToClipboard = () => {
-  if (!inputCnpj.value) {
-    return
-  }
-  navigator.clipboard.writeText(inputCnpj.value)
-  nuxtApp.$toast.info('CNPJ copiado para a área de transferência')
-}
 </script>
 
 <template>
   <div>
-    <header class="z-20 flex w-full flex-col-reverse px-8 pt-2 md:flex-row">
-      <div class="mt-4 md:mt-40">
-        <h2 class="text-2xl text-dark-purple-500 md:text-4xl">
-          Gerador de CNPJ
-        </h2>
-
-        <p class="text-md my-3 text-black-400 md:my-8 md:text-lg">
-          Este gerador de CNPJ tem como objetivo auxiliar programadores,
-          estudantes e testadores a gerar CNPJs válidos, tanto no padrão atual
-          quanto no padrão alfanumérico.
-        </p>
-      </div>
-
-      <img
-        src="/cover-page-gerador-cpf.png"
-        alt="Gerador de CPF"
-        class="mx-auto w-10/12 md:w-5/12"
-      />
-    </header>
+    <PageHero
+      title="Gerador de CNPJ"
+      image-src="/cover-page-gerador-cpf.png"
+      image-alt="Gerador de CNPJ"
+    >
+      Este gerador de CNPJ tem como objetivo auxiliar programadores,
+      estudantes e testadores a gerar CNPJs válidos, tanto no padrão atual
+      quanto no padrão alfanumérico.
+    </PageHero>
 
     <!-- ===== CNPJ generator container ===== -->
     <section
@@ -88,71 +64,21 @@ const copyToClipboard = () => {
       >
         <div class="flex w-full flex-col lg:flex-row lg:w-auto gap-2">
           <!-- ===== Checkbox generate alfa format ===== -->
-          <div
-            class="flex cursor-pointer items-center gap-4 rounded-md border py-2 px-4 hover:border-primary-500 hover:bg-primary-100"
-            :class="{
-              'border-primary-500 bg-primary-100 text-primary-500':
-                generateAlfa,
-              'text-black-400': !generateAlfa,
-            }"
-            @click="toggleGenerateAlfa()"
-          >
-            <Icon
-              :name="generateAlfa ? 'feather:check-square' : 'feather:square'"
-              class="text-lg"
-            />
-
-            <span class="text-lg md:text-xl">Formato Alfanumérico?</span>
-          </div>
+          <ToggleCheckbox v-model="generateAlfa" label="Formato Alfanumérico?" />
 
           <!-- ===== Checkbox generate with points ===== -->
-          <div
-            class="flex cursor-pointer items-center gap-4 rounded-md border py-2 px-4 hover:border-primary-500 hover:bg-primary-100"
-            :class="{
-              'border-primary-500 bg-primary-100 text-primary-500':
-                generateWithPoints,
-              'text-black-400': !generateWithPoints,
-            }"
-            @click="toggleGenerateWithPoints()"
-          >
-            <Icon
-              :name="
-                generateWithPoints ? 'feather:check-square' : 'feather:square'
-              "
-              class="text-lg"
-            />
-
-            <span class="text-lg md:text-xl">Gerar com Pontuação?</span>
-          </div>
+          <ToggleCheckbox v-model="generateWithPoints" label="Gerar com Pontuação?" />
         </div>
 
         <!-- ===== Button generate CNPJ ===== -->
-        <button
-          type="button"
-          class="rounded-xl border border-primary-500 bg-primary-500 py-2 px-6 text-lg text-white transition-all duration-200 hover:shadow-lg md:px-3 md:text-xl"
-          @click="generateNewCnpj()"
-        >
-          Gerar Novo CNPJ
-        </button>
+        <PrimaryButton @click="generateNewCnpj()">Gerar Novo CNPJ</PrimaryButton>
       </div>
 
-      <div class="relative mt-8 w-full">
-        <span
-          class="duration-50 absolute top-[0.60rem] right-3 text-black-400 transition-all hover:cursor-pointer hover:text-primary-500 md:top-[0.82rem]"
-          @click="copyToClipboard()"
-        >
-          <Icon name="feather:copy" class="text-lg md:text-2xl" />
-        </span>
-        <input
-          id="cnpj-input"
-          type="text"
-          v-model="inputCnpj"
-          placeholder="Gerar CNPJ"
-          autocomplete="off"
-          readonly
-          class="b-gray-500 duration-50 w-full rounded-xl border py-2 pr-9 pl-2 text-sm shadow-lg transition-all focus:outline-none focus:ring focus:ring-primary-500 md:py-3 md:pr-12 md:pl-4 md:text-xl"
-        />
-      </div>
+      <CopyInput
+        v-model="inputCnpj"
+        placeholder="Gerar CNPJ"
+        @copy="nuxtApp.$toast.info('CNPJ copiado para a área de transferência')"
+      />
     </section>
 
     <!-- ===== Page Description ===== -->

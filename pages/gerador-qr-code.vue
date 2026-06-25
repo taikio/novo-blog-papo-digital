@@ -55,25 +55,15 @@ const generateNew = () => {
 
 <template>
   <div>
-    <header class="z-20 flex w-full flex-col-reverse px-8 pt-2 md:flex-row">
-      <div class="mt-4 md:mt-40">
-        <h2 class="text-2xl text-dark-purple-500 md:text-4xl">
-          Gerador de QR Code
-        </h2>
-
-        <p class="text-md my-3 text-black-400 md:my-8 md:text-lg">
-          Crie QR Codes únicos, GRÁTIS! <br /><br />
-          Além de ser 100% gratuito, você pode inserir imagens no QR Code para
-          personalizá-lo e deixá-lo com a sua cara.
-        </p>
-      </div>
-
-      <img
-        src="/cover-page-qr-code.png"
-        alt="Gerador de CPF"
-        class="mx-auto w-10/12 md:w-5/12"
-      />
-    </header>
+    <PageHero
+      title="Gerador de QR Code"
+      image-src="/cover-page-qr-code.png"
+      image-alt="Gerador de QR Code"
+    >
+      Crie QR Codes únicos, GRÁTIS! <br /><br />
+      Além de ser 100% gratuito, você pode inserir imagens no QR Code para
+      personalizá-lo e deixá-lo com a sua cara.
+    </PageHero>
 
     <!-- ===== generator container ===== -->
     <section
@@ -119,25 +109,14 @@ const generateNew = () => {
             @change-image="onChangeImage"
           >
             <div class="px-2 py-6">
-              <button
-                type="button"
-                class="rounded-xl border border-primary-500 bg-primary-500 py-2 px-6 text-lg text-white transition-all duration-200 hover:shadow-lg md:px-3 md:text-xl"
-              >
-                Carregar Imagem
-              </button>
+              <PrimaryButton>Carregar Imagem</PrimaryButton>
             </div>
           </image-upload>
         </div>
       </div>
 
       <!-- ===== Button generate CPF ===== -->
-      <button
-        type="button"
-        class="rounded-xl border border-primary-500 bg-primary-500 py-2 px-6 text-lg text-white transition-all duration-200 hover:shadow-lg md:px-3 md:text-xl"
-        @click="generateQRCode()"
-      >
-        Gerar QR Code
-      </button>
+      <PrimaryButton @click="generateQRCode()">Gerar QR Code</PrimaryButton>
     </section>
 
     <!-- ===== Generated QR Code Container ===== -->
@@ -147,23 +126,11 @@ const generateNew = () => {
     >
       <qr-code :data="inputQRCodeValue" :image="imageUrl">
         <template #download="{ pluginInstance }">
-          <button
-            type="button"
-            class="rounded-xl border border-primary-500 bg-primary-500 py-2 px-6 text-lg text-white transition-all duration-200 hover:shadow-lg md:px-3 md:text-xl"
-            @click="() => pluginInstance.download()"
-          >
-            Baixar QR Code
-          </button>
+          <PrimaryButton @click="() => pluginInstance.download()">Baixar QR Code</PrimaryButton>
         </template>
       </qr-code>
 
-      <button
-        type="button"
-        class="rounded-xl border border-primary-500 bg-primary-500 py-2 px-6 text-lg text-white transition-all duration-200 hover:shadow-lg md:px-3 md:text-xl"
-        @click="generateNew()"
-      >
-        Gerar um novo
-      </button>
+      <PrimaryButton @click="generateNew()">Gerar um novo</PrimaryButton>
     </section>
 
     <!-- ===== Page Description ===== -->

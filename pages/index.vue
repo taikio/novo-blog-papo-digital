@@ -126,25 +126,15 @@ const toggleActiveTag = async (tag: string) => {
 
 <template>
   <div>
-    <header class="z-20 flex w-full flex-col-reverse px-8 pt-2 md:flex-row">
-      <div class="mt-4 md:mt-40">
-        <h2 class="text-2xl text-dark-purple-500 md:text-4xl">
-          Um Blog voltado para a comunidade dev
-        </h2>
-
-        <p class="text-md my-3 text-black-400 md:my-8 md:text-lg">
-          Bem vindo(a) ao Blog Papo Digital! <br />
-          Aqui você terá acesso a informações e tutoriais sobre tecnologia,
-          programação e boas dicas sobre Carreira Tech
-        </p>
-      </div>
-
-      <img
-        src="/undraw_In_the_office.png"
-        alt=""
-        class="mx-auto w-10/12 md:w-5/12"
-      />
-    </header>
+    <PageHero
+      title="Um Blog voltado para a comunidade dev"
+      image-src="/undraw_In_the_office.png"
+      image-alt=""
+    >
+      Bem vindo(a) ao Blog Papo Digital! <br />
+      Aqui você terá acesso a informações e tutoriais sobre tecnologia,
+      programação e boas dicas sobre Carreira Tech
+    </PageHero>
 
     <!-- ===== search bar container ===== -->
     <section
