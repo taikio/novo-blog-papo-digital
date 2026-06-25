@@ -119,25 +119,14 @@ const generateNew = () => {
             @change-image="onChangeImage"
           >
             <div class="px-2 py-6">
-              <button
-                type="button"
-                class="rounded-xl border border-primary-500 bg-primary-500 py-2 px-6 text-lg text-white transition-all duration-200 hover:shadow-lg md:px-3 md:text-xl"
-              >
-                Carregar Imagem
-              </button>
+              <PrimaryButton>Carregar Imagem</PrimaryButton>
             </div>
           </image-upload>
         </div>
       </div>
 
       <!-- ===== Button generate CPF ===== -->
-      <button
-        type="button"
-        class="rounded-xl border border-primary-500 bg-primary-500 py-2 px-6 text-lg text-white transition-all duration-200 hover:shadow-lg md:px-3 md:text-xl"
-        @click="generateQRCode()"
-      >
-        Gerar QR Code
-      </button>
+      <PrimaryButton @click="generateQRCode()">Gerar QR Code</PrimaryButton>
     </section>
 
     <!-- ===== Generated QR Code Container ===== -->
@@ -147,23 +136,11 @@ const generateNew = () => {
     >
       <qr-code :data="inputQRCodeValue" :image="imageUrl">
         <template #download="{ pluginInstance }">
-          <button
-            type="button"
-            class="rounded-xl border border-primary-500 bg-primary-500 py-2 px-6 text-lg text-white transition-all duration-200 hover:shadow-lg md:px-3 md:text-xl"
-            @click="() => pluginInstance.download()"
-          >
-            Baixar QR Code
-          </button>
+          <PrimaryButton @click="() => pluginInstance.download()">Baixar QR Code</PrimaryButton>
         </template>
       </qr-code>
 
-      <button
-        type="button"
-        class="rounded-xl border border-primary-500 bg-primary-500 py-2 px-6 text-lg text-white transition-all duration-200 hover:shadow-lg md:px-3 md:text-xl"
-        @click="generateNew()"
-      >
-        Gerar um novo
-      </button>
+      <PrimaryButton @click="generateNew()">Gerar um novo</PrimaryButton>
     </section>
 
     <!-- ===== Page Description ===== -->

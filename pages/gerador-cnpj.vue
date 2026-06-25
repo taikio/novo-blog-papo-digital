@@ -127,13 +127,7 @@ const copyToClipboard = () => {
         </div>
 
         <!-- ===== Button generate CNPJ ===== -->
-        <button
-          type="button"
-          class="rounded-xl border border-primary-500 bg-primary-500 py-2 px-6 text-lg text-white transition-all duration-200 hover:shadow-lg md:px-3 md:text-xl"
-          @click="generateNewCnpj()"
-        >
-          Gerar Novo CNPJ
-        </button>
+        <PrimaryButton @click="generateNewCnpj()">Gerar Novo CNPJ</PrimaryButton>
       </div>
 
       <div class="relative mt-8 w-full">
