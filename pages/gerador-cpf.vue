@@ -33,13 +33,6 @@ const generateNewCpf = () => {
     : generateCPF()
 }
 
-const copyToClipboard = () => {
-  if (!inputCpf.value) {
-    return
-  }
-  navigator.clipboard.writeText(inputCpf.value)
-  nuxtApp.$toast.info('CPF copiado para a área de transferência')
-}
 </script>
 
 <template>
@@ -78,23 +71,11 @@ const copyToClipboard = () => {
         <PrimaryButton @click="generateNewCpf()">Gerar Novo CPF</PrimaryButton>
       </div>
 
-      <div class="relative mt-8 w-full">
-        <span
-          class="duration-50 absolute top-[0.60rem] right-3 text-black-400 transition-all hover:cursor-pointer hover:text-primary-500 md:top-[0.82rem]"
-          @click="copyToClipboard()"
-        >
-          <Icon name="feather:copy" class="text-lg md:text-2xl" />
-        </span>
-        <input
-          id="cpf-input"
-          type="text"
-          v-model="inputCpf"
-          placeholder="Gerar CPF"
-          autocomplete="off"
-          readonly
-          class="b-gray-500 duration-50 w-full rounded-xl border py-2 pr-9 pl-2 text-sm shadow-lg transition-all focus:outline-none focus:ring focus:ring-primary-500 md:py-3 md:pr-12 md:pl-4 md:text-xl"
-        />
-      </div>
+      <CopyInput
+        v-model="inputCpf"
+        placeholder="Gerar CPF"
+        @copy="nuxtApp.$toast.info('CPF copiado para a área de transferência')"
+      />
     </section>
 
     <!-- ===== Page Description ===== -->
