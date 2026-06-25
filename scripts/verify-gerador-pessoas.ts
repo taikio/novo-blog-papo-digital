@@ -1,5 +1,6 @@
 import { generateCPF } from '../utils/gerador-pessoas/cpf'
-import { isValidCPF } from '@brazilian-utils/brazilian-utils'
+import { generatePIS } from '../utils/gerador-pessoas/pis'
+import { isValidCPF, isValidPIS } from '@brazilian-utils/brazilian-utils'
 import { UF_TO_CPF_REGION, UF_TO_DDDS } from '../utils/gerador-pessoas/data'
 
 let failures = 0
@@ -35,8 +36,18 @@ for (const [uf, expectedRegion] of ufTests) {
 }
 console.log(`CPF UF-region: ${ufTests.length * 50} generated, ${failures} total failures so far`)
 
+// 3. Verify 1000 random PIS numbers
+for (let i = 0; i < 1000; i++) {
+  const { raw } = generatePIS()
+  if (!isValidPIS(raw)) {
+    console.error(`PIS FAIL: ${raw}`)
+    failures++
+  }
+}
+console.log(`PIS: 1000 generated, ${failures} total failures so far`)
+
 if (failures > 0) {
   console.error(`\n${failures} TOTAL FAILURES`)
   process.exit(1)
 }
-console.log('\nAll CPF checks PASSED')
+console.log('\nAll CPF + PIS checks PASSED')
