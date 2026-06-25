@@ -55,25 +55,15 @@ const generateNew = () => {
 
 <template>
   <div>
-    <header class="z-20 flex w-full flex-col-reverse px-8 pt-2 md:flex-row">
-      <div class="mt-4 md:mt-40">
-        <h2 class="text-2xl text-dark-purple-500 md:text-4xl">
-          Gerador de QR Code
-        </h2>
-
-        <p class="text-md my-3 text-black-400 md:my-8 md:text-lg">
-          Crie QR Codes únicos, GRÁTIS! <br /><br />
-          Além de ser 100% gratuito, você pode inserir imagens no QR Code para
-          personalizá-lo e deixá-lo com a sua cara.
-        </p>
-      </div>
-
-      <img
-        src="/cover-page-qr-code.png"
-        alt="Gerador de CPF"
-        class="mx-auto w-10/12 md:w-5/12"
-      />
-    </header>
+    <PageHero
+      title="Gerador de QR Code"
+      image-src="/cover-page-qr-code.png"
+      image-alt="Gerador de QR Code"
+    >
+      Crie QR Codes únicos, GRÁTIS! <br /><br />
+      Além de ser 100% gratuito, você pode inserir imagens no QR Code para
+      personalizá-lo e deixá-lo com a sua cara.
+    </PageHero>
 
     <!-- ===== generator container ===== -->
     <section

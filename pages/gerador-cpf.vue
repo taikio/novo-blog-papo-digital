@@ -37,25 +37,15 @@ const generateNewCpf = () => {
 
 <template>
   <div>
-    <header class="z-20 flex w-full flex-col-reverse px-8 pt-2 md:flex-row">
-      <div class="mt-4 md:mt-40">
-        <h2 class="text-2xl text-dark-purple-500 md:text-4xl">
-          Gerador de CPF
-        </h2>
-
-        <p class="text-md my-3 text-black-400 md:my-8 md:text-lg">
-          Este gerador de CPF tem como objetivo auxiliar programadores,
-          estudantes e testadores a gerar CPF`s válidos para utilização em
-          testes de softwares em desenvolvimento.
-        </p>
-      </div>
-
-      <img
-        src="/cover-page-gerador-cpf.png"
-        alt="Gerador de CPF"
-        class="mx-auto w-10/12 md:w-5/12"
-      />
-    </header>
+    <PageHero
+      title="Gerador de CPF"
+      image-src="/cover-page-gerador-cpf.png"
+      image-alt="Gerador de CPF"
+    >
+      Este gerador de CPF tem como objetivo auxiliar programadores,
+      estudantes e testadores a gerar CPF`s válidos para utilização em
+      testes de softwares em desenvolvimento.
+    </PageHero>
 
     <!-- ===== CPF generator container ===== -->
     <section
