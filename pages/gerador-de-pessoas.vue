@@ -198,12 +198,12 @@ function handleGenerate() {
             ]"
             :key="fi"
           >
-            <div class="flex items-center justify-between rounded-lg px-2 py-1 hover:bg-gray-100">
-              <span class="min-w-40 text-sm text-black-400">{{ entry.label }}</span>
-              <div class="flex items-center gap-2">
-                <span class="text-sm font-medium text-dark-purple-500">{{ entry.value }}</span>
+            <div class="grid grid-cols-[160px_1fr] md:grid-cols-[220px_1fr] items-center rounded-lg px-2 py-1.5 hover:bg-gray-100">
+              <span class="text-sm md:text-base text-black-400">{{ entry.label }}</span>
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-sm md:text-base font-medium text-dark-purple-500">{{ entry.value }}</span>
                 <button
-                  class="text-black-400 transition-colors hover:text-primary-500"
+                  class="shrink-0 text-black-400 transition-colors hover:text-primary-500"
                   :aria-label="`Copiar ${entry.label}`"
                   @click="copyText(entry.value)"
                 >
