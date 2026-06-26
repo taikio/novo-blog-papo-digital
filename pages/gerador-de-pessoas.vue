@@ -1,487 +1,315 @@
 <script lang="ts" setup>
-import { ref, onMounted, watch } from 'vue' // Make sure watch is imported
 import generateMeta from '@/utils/generateMeta'
-import {
-  useBrazilianStates,
-  type BrazilianState,
-} from '@/composables/useBrazilianStates' // Import composable and type
-import { Faker, pt_BR } from '@faker-js/faker'
-import { generateCPF } from '@brazilian-utils/brazilian-utils'
-import { useToast } from 'vue-toastification'
+import { useGeradorPessoas } from '@/composables/useGeradorPessoas'
+import { useBrazilianStates } from '@/composables/useBrazilianStates'
 
-const pageTitle = 'Gerador de Pessoas Online | Crie Dados Fictícios'
+const nuxtApp = useNuxtApp()
+const { params, profiles, generate, getDoc, profileToText, allProfilesToText, doExportJSON, doExportCSV } =
+  useGeradorPessoas()
+const { getStates } = useBrazilianStates()
+const states = getStates()
+
+const pageTitle = 'Gerador de Pessoas Fictícias | Dados Fake para Testes | Papo Digital'
 const pageDescription =
-  'Gere dados de pessoas fictícias de forma rápida e fácil, incluindo nome, idade, CPF, endereço e mais, para testes e simulações.'
-// IMPORTANT: Update this URL to be the actual final URL for this page if it's different
+  'Gere perfis completos de pessoas fictícias brasileiras: CPF, RG, PIS, Título de Eleitor, nome, endereço, e-mail e telefone válidos para testes de software.'
 const pageUrl = 'https://papodigital.net.br/gerador-de-pessoas'
-
-const pageMetaTags = generateMeta({
-  pageTitle,
-  description: pageDescription,
-  contentType: 'website',
-  url: pageUrl,
-  twitterUrl: pageUrl, // Often the same as url
-  twitterTitle: pageTitle, // Often the same as pageTitle
-  twitterDescription: pageDescription, // Often the same as description
-  // image: 'https://papodigital.net.br/path-to-social-share-image-for-gerador-de-pessoas.png' // Optional: social sharing image
-})
 
 useHead({
   title: pageTitle,
-  meta: pageMetaTags,
-})
-
-// Interface for the generated person data
-interface PersonData {
-  name: string
-  age: number
-  gender: string // This will be the actual gender generated, not necessarily the input selection (e.g., if 'Aleatório')
-  email: string
-  phone: string
-  cpf: string
-  address: {
-    street: string
-    number: string
-    complement?: string
-    cep: string
-    city: string // City used for generation
-    state: string // State UF used for generation
-  }
-}
-
-const isPageInDraft = ref(true)
-const showResults = ref(false)
-const selectedGender = ref<string>('Aleatório') // Default to Aleatório
-const selectedState = ref<string>('') // Stores UF of the selected state
-const selectedCity = ref<string>('') // Stores name of the selected city
-
-const statesList = ref<BrazilianState[]>([])
-const citiesList = ref<string[]>([])
-const isLoadingCities = ref(false)
-
-const generatedPersonData = ref<PersonData | null>(null)
-
-const { getStates, getCitiesByState } = useBrazilianStates()
-const faker = new Faker({ locale: [pt_BR] })
-const toast = useToast()
-
-onMounted(() => {
-  statesList.value = getStates()
-})
-
-// Watch for changes in selectedState to fetch cities
-watch(selectedState, async (newStateUF) => {
-  if (newStateUF) {
-    isLoadingCities.value = true
-    citiesList.value = [] // Clear previous cities
-    selectedCity.value = '' // Reset selected city
-    try {
-      const cities = await getCitiesByState(newStateUF)
-      citiesList.value = cities
-    } catch (error) {
-      console.error('Failed to fetch cities:', error)
-      citiesList.value = [] // Ensure it's an empty array on error
-    } finally {
-      isLoadingCities.value = false
-    }
-  } else {
-    citiesList.value = []
-    selectedCity.value = ''
-  }
-})
-
-const copyToClipboard = async (
-  text: string | number | undefined,
-  fieldName: string,
-) => {
-  if (text === undefined || text === null) {
-    toast.error(`Nenhum valor para copiar para ${fieldName}.`)
-    return
-  }
-  const textToCopy = typeof text === 'number' ? text.toString() : text
-  try {
-    await navigator.clipboard.writeText(textToCopy)
-    toast.success(`${fieldName} copiado para a área de transferência!`)
-  } catch (err) {
-    console.error('Failed to copy text: ', err)
-    toast.error(`Falha ao copiar ${fieldName}.`)
-  }
-}
-
-const generatePersonDataInternal = () => {
-  if (!selectedState.value || !selectedCity.value) {
-    toast.error(
-      'Por favor, selecione o estado e a cidade antes de gerar os dados.',
-    )
-    return
-  }
-
-  const genderForFaker =
-    selectedGender.value === 'Masculino'
-      ? 'male'
-      : selectedGender.value === 'Feminino'
-        ? 'female'
-        : undefined
-
-  const actualGenderGenerated =
-    genderForFaker || (faker.datatype.boolean() ? 'male' : 'female')
-  const firstName = faker.person.firstName(actualGenderGenerated)
-  const lastName = faker.person.lastName(actualGenderGenerated)
-
-  const person: PersonData = {
-    name: `${firstName} ${lastName}`,
-    age: faker.number.int({ min: 18, max: 80 }),
-    gender:
-      selectedGender.value === 'Aleatório'
-        ? actualGenderGenerated === 'male'
-          ? 'Masculino'
-          : 'Feminino'
-        : selectedGender.value,
-    email: faker.internet.email({ firstName, lastName }).toLowerCase(),
-    phone: faker.phone.number('## #####-####'),
-    cpf: generateCPF(),
-    address: {
-      street: faker.location.street(),
-      number: faker.number.int({ min: 1, max: 2000 }).toString(),
-      complement: faker.datatype.boolean(0.3)
-        ? faker.location.secondaryAddress()
-        : undefined,
-      cep: faker.location.zipCode('#####-###'),
-      city: selectedCity.value,
-      state: selectedState.value,
+  meta: generateMeta({
+    pageTitle,
+    description: pageDescription,
+    contentType: 'website',
+    url: pageUrl,
+    twitterUrl: pageUrl,
+    twitterTitle: pageTitle,
+    twitterDescription: pageDescription,
+  }),
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'Gerador de Pessoas Fictícias Brasileiras',
+        applicationCategory: 'DeveloperApplication',
+        operatingSystem: 'Web',
+        description: pageDescription,
+        url: pageUrl,
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'BRL' },
+      }),
     },
-  }
+  ],
+})
 
-  generatedPersonData.value = person
-  showResults.value = true
+async function copyText(text: string) {
+  await navigator.clipboard.writeText(text)
+  nuxtApp.$toast.success('Copiado!')
 }
 
-const triggerPersonGeneration = () => {
-  generatePersonDataInternal()
-}
-
-const resetForm = () => {
-  showResults.value = false
-  generatedPersonData.value = null
-
-  selectedGender.value = 'Aleatório'
-  selectedState.value = ''
-  // selectedCity and citiesList are reset by the selectedState watcher
+function handleGenerate() {
+  if (params.ageMin > params.ageMax) params.ageMax = params.ageMin
+  generate()
 }
 </script>
 
 <template>
-  <div
-    v-if="isPageInDraft"
-    class="flex w-full h-96 items-center justify-center"
-  >
-    <h1 class="text-3xl font-bold text-dark-purple-500 md:text-5xl">
-      Página em Construção
-    </h1>
-  </div>
-  <div v-else>
-    <header
-      class="z-20 flex w-full flex-col-reverse px-8 pt-2 md:flex-row md:items-center"
+  <div>
+    <PageHero
+      title="Gerador de Pessoas Fictícias"
+      image-src="/cover-page-gerador-cpf.png"
+      image-alt="Gerador de Pessoas Fictícias Brasileiras"
     >
-      <div class="mt-4 md:mt-20 md:w-1/2">
-        <h1 class="text-3xl font-bold text-dark-purple-500 md:text-5xl">
-          Gerador de Pessoas
-        </h1>
-        <p class="text-md my-3 text-black-400 md:my-8 md:text-lg">
-          Crie dados de pessoas fictícias de forma rápida e fácil para seus
-          testes, layouts e simulações. Selecione as opções abaixo e gere uma
-          pessoa instantaneamente.
-        </p>
+      Gere perfis completos com CPF, RG, endereço, e-mail e telefone válidos
+      para uso em testes de software. Todos os dados são 100% fictícios.
+    </PageHero>
+
+    <!-- ===== PARÂMETROS ===== -->
+    <section class="flex w-full flex-col gap-6 px-8 py-4 md:px-40">
+
+      <!-- Disclaimer -->
+      <div class="rounded-xl border border-yellow-400 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
+        <strong>Aviso:</strong> Todos os dados gerados são <strong>completamente fictícios</strong>
+        e criados apenas para fins de teste de software. Nenhum dado corresponde a pessoas reais.
       </div>
-      <div class="mt-4 md:mt-12 md:w-1/2 flex justify-center">
-        <div
-          class="w-64 h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500"
+
+      <!-- Sex + UF + ages + quantity -->
+      <div class="flex flex-wrap gap-3">
+        <div class="flex flex-col gap-1">
+          <label class="text-sm text-black-400">Sexo</label>
+          <select
+            v-model="params.sex"
+            class="rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-primary-500"
+          >
+            <option value="random">Aleatório</option>
+            <option value="male">Masculino</option>
+            <option value="female">Feminino</option>
+          </select>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm text-black-400">Estado (UF)</label>
+          <select
+            v-model="params.uf"
+            class="rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-primary-500"
+          >
+            <option :value="null">Aleatório</option>
+            <option v-for="state in states" :key="state.uf" :value="state.uf">
+              {{ state.uf }} — {{ state.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm text-black-400">Idade mínima</label>
+          <input
+            v-model.number="params.ageMin"
+            type="number"
+            min="1"
+            max="120"
+            class="w-24 rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-primary-500"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm text-black-400">Idade máxima</label>
+          <input
+            v-model.number="params.ageMax"
+            type="number"
+            min="1"
+            max="120"
+            class="w-24 rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-primary-500"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm text-black-400">Quantidade</label>
+          <input
+            v-model.number="params.quantity"
+            type="number"
+            min="1"
+            max="10"
+            class="w-20 rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-primary-500"
+          />
+        </div>
+      </div>
+
+      <!-- Toggles row 1: format -->
+      <div class="flex flex-wrap gap-3">
+        <ToggleCheckbox v-model="params.useMask" label="Exibir com pontuação?" />
+      </div>
+
+      <!-- Toggles row 2: extra documents -->
+      <div class="flex flex-wrap gap-3">
+        <ToggleCheckbox v-model="params.showPis" label="PIS/PASEP" />
+        <ToggleCheckbox v-model="params.showTituloEleitor" label="Título de Eleitor" />
+        <ToggleCheckbox v-model="params.showProfissao" label="Profissão" />
+        <ToggleCheckbox v-model="params.showNaturalidade" label="Naturalidade" />
+      </div>
+
+      <!-- Generate button -->
+      <div class="flex justify-end">
+        <PrimaryButton @click="handleGenerate">
+          Gerar Pessoa{{ params.quantity > 1 ? 's' : '' }}
+        </PrimaryButton>
+      </div>
+    </section>
+
+    <!-- ===== RESULTADOS ===== -->
+    <section v-if="profiles.length > 0" class="mt-8 flex flex-col gap-6 px-8 md:px-40">
+      <div
+        v-for="(profile, idx) in profiles"
+        :key="idx"
+        class="rounded-2xl border border-gray-200 bg-white p-5 shadow-md"
+      >
+        <!-- Card header -->
+        <div class="mb-3 flex items-center justify-between border-b border-gray-100 pb-2">
+          <span class="text-base font-semibold text-dark-purple-500">
+            Pessoa {{ idx + 1 }}
+          </span>
+          <span class="rounded-full bg-yellow-100 px-2 py-0.5 text-xs text-yellow-700">
+            Dados fictícios
+          </span>
+        </div>
+
+        <!-- Fields -->
+        <div class="flex flex-col gap-1">
+          <template
+            v-for="(entry, fi) in [
+              { label: 'Nome', value: profile.nome },
+              { label: 'Sexo', value: profile.sexo },
+              { label: 'Data de Nascimento', value: profile.dataNascimento },
+              { label: 'Idade', value: String(profile.idade) },
+              { label: 'CPF', value: getDoc(profile.cpf) },
+              { label: 'RG', value: getDoc(profile.rg) },
+              { label: 'Nome da Mãe', value: profile.nomeMae },
+              { label: 'E-mail', value: profile.email },
+              { label: 'Telefone', value: getDoc(profile.telefone) },
+              { label: 'Logradouro', value: profile.endereco.logradouro },
+              { label: 'Número', value: profile.endereco.numero },
+              { label: 'Bairro', value: profile.endereco.bairro },
+              { label: 'Cidade', value: profile.endereco.cidade },
+              { label: 'UF', value: profile.endereco.uf },
+              { label: 'CEP', value: getDoc(profile.endereco.cep) },
+              ...(profile.pis ? [{ label: 'PIS/PASEP', value: getDoc(profile.pis) }] : []),
+              ...(profile.tituloEleitor ? [{ label: 'Título de Eleitor', value: getDoc(profile.tituloEleitor) }] : []),
+              ...(profile.profissao ? [{ label: 'Profissão', value: profile.profissao }] : []),
+              ...(profile.naturalidade ? [{ label: 'Naturalidade', value: profile.naturalidade }] : []),
+            ]"
+            :key="fi"
+          >
+            <div class="grid grid-cols-[160px_1fr] md:grid-cols-[220px_1fr] items-center rounded-lg px-2 py-1.5 hover:bg-gray-100">
+              <span class="text-sm md:text-base text-black-400">{{ entry.label }}</span>
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-sm md:text-base font-medium text-dark-purple-500">{{ entry.value }}</span>
+                <button
+                  class="shrink-0 text-black-400 transition-colors hover:text-primary-500"
+                  :aria-label="`Copiar ${entry.label}`"
+                  @click="copyText(entry.value)"
+                >
+                  <Icon name="feather:copy" class="text-base" />
+                </button>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <!-- Copy all for this card -->
+        <div class="mt-4 flex justify-end">
+          <button
+            class="text-sm text-primary-500 underline hover:text-primary-400"
+            @click="copyText(profileToText(profile))"
+          >
+            Copiar todos os dados
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== EXPORT ACTIONS ===== -->
+      <div class="flex flex-wrap items-center justify-end gap-3 border-t border-gray-200 pt-4">
+        <button
+          class="rounded-xl border border-gray-300 px-4 py-2 text-sm text-black-400 transition-all hover:border-primary-500 hover:text-primary-500"
+          @click="copyText(allProfilesToText())"
         >
-          Imagem (placeholder)
-        </div>
+          <Icon name="feather:copy" class="mr-1" /> Copiar todos
+        </button>
+        <button
+          class="rounded-xl border border-gray-300 px-4 py-2 text-sm text-black-400 transition-all hover:border-primary-500 hover:text-primary-500"
+          @click="doExportCSV"
+        >
+          <Icon name="feather:download" class="mr-1" /> Exportar CSV
+        </button>
+        <button
+          class="rounded-xl border border-gray-300 px-4 py-2 text-sm text-black-400 transition-all hover:border-primary-500 hover:text-primary-500"
+          @click="doExportJSON"
+        >
+          <Icon name="feather:download" class="mr-1" /> Exportar JSON
+        </button>
       </div>
-    </header>
+    </section>
 
-    <main class="w-full flex flex-col items-center px-8 py-10">
-      <div class="w-full max-w-2xl bg-white shadow-xl rounded-lg p-6 md:p-8">
-        <div v-if="!showResults">
-          <h2 class="text-2xl font-semibold text-gray-700 mb-6 text-center">
-            Configure os Dados
-          </h2>
-          <form @submit.prevent="triggerPersonGeneration">
-            <div class="space-y-6">
-              <div>
-                <label
-                  for="gender"
-                  class="block text-sm font-medium text-gray-700"
-                  >Gênero</label
-                >
-                <select
-                  id="gender"
-                  v-model="selectedGender"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-                >
-                  <option value="Aleatório">Aleatório</option>
-                  <option value="Masculino">Masculino</option>
-                  <option value="Feminino">Feminino</option>
-                </select>
-              </div>
-              <div>
-                <label
-                  for="state"
-                  class="block text-sm font-medium text-gray-700"
-                  >Estado (UF)</label
-                >
-                <select
-                  id="state"
-                  v-model="selectedState"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-                >
-                  <option value="">Selecione um estado</option>
-                  <option
-                    v-for="state in statesList"
-                    :key="state.uf"
-                    :value="state.uf"
-                  >
-                    {{ state.name }}
-                  </option>
-                </select>
-              </div>
-              <div>
-                <label
-                  for="city"
-                  class="block text-sm font-medium text-gray-700"
-                  >Cidade</label
-                >
-                <select
-                  id="city"
-                  v-model="selectedCity"
-                  :disabled="
-                    !selectedState ||
-                    isLoadingCities ||
-                    (citiesList.length === 0 && !!selectedState)
-                  "
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 disabled:bg-gray-100"
-                >
-                  <option v-if="isLoadingCities" value="">
-                    Carregando cidades...
-                  </option>
-                  <option v-else-if="!selectedState" value="">
-                    Selecione um estado primeiro
-                  </option>
-                  <option
-                    v-else-if="
-                      citiesList.length === 0 &&
-                      !!selectedState &&
-                      !isLoadingCities
-                    "
-                    value=""
-                  >
-                    Nenhuma cidade encontrada ou estado sem cidades
-                  </option>
-                  <option v-for="city in citiesList" :key="city" :value="city">
-                    {{ city }}
-                  </option>
-                </select>
-              </div>
-              <div class="pt-4">
-                <button
-                  type="submit"
-                  class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Gerar Pessoa
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div v-else>
-          <h2 class="text-2xl font-semibold text-gray-700 mb-6 text-center">
-            Pessoa Gerada
-          </h2>
-          <div v-if="generatedPersonData" class="space-y-4">
-            <div>
-              <strong class="block text-sm font-medium text-gray-600"
-                >Nome:</strong
-              >
-              <div class="flex items-center mt-1">
-                <p
-                  class="text-lg text-gray-800 bg-gray-50 p-2 rounded-l-md flex-grow break-all"
-                >
-                  {{ generatedPersonData.name }}
-                </p>
-                <button
-                  @click="copyToClipboard(generatedPersonData.name, 'Nome')"
-                  aria-label="Copiar Nome"
-                  class="p-2 text-sm bg-gray-200 hover:bg-gray-300 rounded-r-md border-l border-gray-300 whitespace-nowrap"
-                >
-                  Copiar
-                </button>
-              </div>
-            </div>
-            <div>
-              <strong class="block text-sm font-medium text-gray-600"
-                >Idade:</strong
-              >
-              <div class="flex items-center mt-1">
-                <p
-                  class="text-lg text-gray-800 bg-gray-50 p-2 rounded-l-md flex-grow"
-                >
-                  {{ generatedPersonData.age }}
-                </p>
-                <button
-                  @click="copyToClipboard(generatedPersonData.age, 'Idade')"
-                  aria-label="Copiar Idade"
-                  class="p-2 text-sm bg-gray-200 hover:bg-gray-300 rounded-r-md border-l border-gray-300 whitespace-nowrap"
-                >
-                  Copiar
-                </button>
-              </div>
-            </div>
-            <div>
-              <strong class="block text-sm font-medium text-gray-600"
-                >Gênero:</strong
-              >
-              <div class="flex items-center mt-1">
-                <p
-                  class="text-lg text-gray-800 bg-gray-50 p-2 rounded-l-md flex-grow"
-                >
-                  {{ generatedPersonData.gender }}
-                </p>
-                <button
-                  @click="copyToClipboard(generatedPersonData.gender, 'Gênero')"
-                  aria-label="Copiar Gênero"
-                  class="p-2 text-sm bg-gray-200 hover:bg-gray-300 rounded-r-md border-l border-gray-300 whitespace-nowrap"
-                >
-                  Copiar
-                </button>
-              </div>
-            </div>
-            <div>
-              <strong class="block text-sm font-medium text-gray-600"
-                >Email:</strong
-              >
-              <div class="flex items-center mt-1">
-                <p
-                  class="text-lg text-gray-800 bg-gray-50 p-2 rounded-l-md flex-grow break-all"
-                >
-                  {{ generatedPersonData.email }}
-                </p>
-                <button
-                  @click="copyToClipboard(generatedPersonData.email, 'Email')"
-                  aria-label="Copiar Email"
-                  class="p-2 text-sm bg-gray-200 hover:bg-gray-300 rounded-r-md border-l border-gray-300 whitespace-nowrap"
-                >
-                  Copiar
-                </button>
-              </div>
-            </div>
-            <div>
-              <strong class="block text-sm font-medium text-gray-600"
-                >Telefone:</strong
-              >
-              <div class="flex items-center mt-1">
-                <p
-                  class="text-lg text-gray-800 bg-gray-50 p-2 rounded-l-md flex-grow"
-                >
-                  {{ generatedPersonData.phone }}
-                </p>
-                <button
-                  @click="
-                    copyToClipboard(generatedPersonData.phone, 'Telefone')
-                  "
-                  aria-label="Copiar Telefone"
-                  class="p-2 text-sm bg-gray-200 hover:bg-gray-300 rounded-r-md border-l border-gray-300 whitespace-nowrap"
-                >
-                  Copiar
-                </button>
-              </div>
-            </div>
-            <div>
-              <strong class="block text-sm font-medium text-gray-600"
-                >CPF:</strong
-              >
-              <div class="flex items-center mt-1">
-                <p
-                  class="text-lg text-gray-800 bg-gray-50 p-2 rounded-l-md flex-grow"
-                >
-                  {{ generatedPersonData.cpf }}
-                </p>
-                <button
-                  @click="copyToClipboard(generatedPersonData.cpf, 'CPF')"
-                  aria-label="Copiar CPF"
-                  class="p-2 text-sm bg-gray-200 hover:bg-gray-300 rounded-r-md border-l border-gray-300 whitespace-nowrap"
-                >
-                  Copiar
-                </button>
-              </div>
-            </div>
-            <div>
-              <strong class="block text-sm font-medium text-gray-600"
-                >Endereço Completo:</strong
-              >
-              <div class="mt-1 bg-gray-50 p-3 rounded-md space-y-1">
-                <p>
-                  <strong>Rua:</strong>
-                  {{ generatedPersonData.address.street }},
-                  {{ generatedPersonData.address.number }}
-                </p>
-                <p v-if="generatedPersonData.address.complement">
-                  <strong>Complemento:</strong>
-                  {{ generatedPersonData.address.complement }}
-                </p>
-                <p>
-                  <strong>CEP:</strong> {{ generatedPersonData.address.cep }}
-                </p>
-                <p>
-                  <strong>Cidade:</strong>
-                  {{ generatedPersonData.address.city }}
-                </p>
-                <p>
-                  <strong>Estado:</strong>
-                  {{ generatedPersonData.address.state }}
-                </p>
-              </div>
-              <button
-                @click="
-                  copyToClipboard(
-                    `Rua: ${generatedPersonData.address.street}, ${generatedPersonData.address.number}\n` +
-                      (generatedPersonData.address.complement
-                        ? `Complemento: ${generatedPersonData.address.complement}\n`
-                        : '') +
-                      `CEP: ${generatedPersonData.address.cep}\n` +
-                      `Cidade: ${generatedPersonData.address.city}\n` +
-                      `Estado: ${generatedPersonData.address.state}`,
-                    'Endereço Completo',
-                  )
-                "
-                aria-label="Copiar Endereço Completo"
-                class="mt-2 w-full p-2 text-sm bg-blue-500 text-white hover:bg-blue-600 rounded-md"
-              >
-                Copiar Endereço Completo
-              </button>
-            </div>
+    <!-- ===== AD BANNER — after results, before SEO content ===== -->
+    <section class="mt-12 px-8 md:px-40">
+      <AdBanner ad-slot="5036362920" />
+    </section>
 
-            <!-- Gerar Nova Pessoa Button -->
-            <div class="mt-8 text-center">
-              <button
-                @click="resetForm"
-                type="button"
-                class="py-2 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Gerar Nova Pessoa
-              </button>
-            </div>
-          </div>
-          <div v-else class="text-center text-gray-500">
-            Nenhum dado gerado ainda.
-          </div>
+    <!-- ===== SEO CONTENT ===== -->
+    <section class="mt-12 flex flex-col gap-6 px-8 pb-16 md:px-40">
+      <h2 class="text-xl text-black-500 md:text-2xl">
+        O que é o Gerador de Pessoas Fictícias?
+      </h2>
+      <p class="text-xs text-black-400 md:text-lg">
+        Esta ferramenta gera perfis completos de pessoas fictícias com CPF, RG, PIS/PASEP, Título de
+        Eleitor, nome, e-mail, telefone e endereço. Todos os documentos são estruturalmente válidos —
+        passam nos algoritmos de dígito verificador — mas <strong>não correspondem a pessoas reais</strong>.
+      </p>
+
+      <h2 class="text-xl text-black-500 md:text-2xl">
+        Para que serve?
+      </h2>
+      <p class="text-xs text-black-400 md:text-lg">
+        Desenvolvedores, analistas de QA e estudantes usam dados fictícios para popular formulários,
+        testar validações de CPF/CNPJ, alimentar bancos de dados de desenvolvimento e criar cenários
+        de teste sem expor dados reais de pessoas. Com o gerador em lote você cria até 10 perfis de
+        uma vez e exporta diretamente para JSON ou CSV.
+      </p>
+
+      <h2 class="text-xl text-black-500 md:text-2xl">
+        Como os documentos são gerados?
+      </h2>
+      <p class="text-xs text-black-400 md:text-lg">
+        O CPF é gerado com o algoritmo oficial de módulo 11 da Receita Federal, incluindo o dígito de
+        região fiscal vinculado ao estado selecionado. O PIS/PASEP segue o mesmo princípio. O Título de
+        Eleitor utiliza o algoritmo oficial do TSE, com os pesos definidos pela especificação e o
+        tratamento especial dos estados de SP e MG. O RG segue o formato SSP-SP como aproximação —
+        já que não existe um padrão nacional unificado.
+      </p>
+
+      <h2 class="text-xl text-black-500 md:text-2xl">
+        Perguntas Frequentes
+      </h2>
+      <dl class="flex flex-col gap-4">
+        <div>
+          <dt class="font-semibold text-black-500">Os CPFs gerados são de pessoas reais?</dt>
+          <dd class="text-xs text-black-400 md:text-lg">
+            Não. Apesar de serem matematicamente válidos, são números aleatórios que não
+            pertencem a nenhum cadastro. Usar estes dados para fins ilícitos é crime.
+          </dd>
         </div>
-      </div>
-    </main>
+        <div>
+          <dt class="font-semibold text-black-500">Os dados trafegam pela internet?</dt>
+          <dd class="text-xs text-black-400 md:text-lg">
+            Não. Toda a geração acontece no seu navegador, sem nenhuma chamada de servidor.
+          </dd>
+        </div>
+        <div>
+          <dt class="font-semibold text-black-500">Posso usar em produção?</dt>
+          <dd class="text-xs text-black-400 md:text-lg">
+            Esta ferramenta destina-se exclusivamente a ambientes de desenvolvimento e teste.
+            Nunca use dados fictícios em sistemas de produção ou cadastros reais.
+          </dd>
+        </div>
+      </dl>
+    </section>
   </div>
 </template>
-
-<style scoped>
-/* Scoped styles can be added here if needed */
-</style>
