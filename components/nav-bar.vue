@@ -47,6 +47,13 @@ const isABlogRoute = computed(
         Gerador de QR Code
       </NuxtLink>
 
+      <NuxtLink
+        to="/gerador-de-pessoas"
+        class="text-md hidden cursor-pointer text-black-400 transition-all duration-150 hover:text-primary-500 md:inline-block"
+      >
+        Gerador de Pessoas
+      </NuxtLink>
+
       <a
         title="Acessar canal no Youtube"
         href="https://www.youtube.com/channel/UCOkZkn7IzpbHkLxFsy4LyCg"
