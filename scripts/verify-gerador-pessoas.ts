@@ -1,6 +1,7 @@
 import { generateCPF } from '../utils/gerador-pessoas/cpf'
 import { generatePIS } from '../utils/gerador-pessoas/pis'
 import { generateTituloEleitor, validateTitulo } from '../utils/gerador-pessoas/titulo-eleitor'
+import { generateTelefone } from '../utils/gerador-pessoas/telefone'
 import { isValidCPF, isValidPIS } from '@brazilian-utils/brazilian-utils'
 import { UF_TO_CPF_REGION, UF_TO_DDDS } from '../utils/gerador-pessoas/data'
 
@@ -74,8 +75,22 @@ for (let i = 0; i < 1000; i++) {
 }
 console.log(`Título: 1000 generated, ${failures} total failures so far`)
 
+// 6. Verify DDD belongs to the correct UF's list
+const dddTestUfs = ['SP', 'MG', 'RS', 'CE', 'AM']
+for (const uf of dddTestUfs) {
+  for (let i = 0; i < 50; i++) {
+    const { raw } = generateTelefone(uf)
+    const ddd = parseInt(raw.slice(0, 2), 10)  // raw = DDD (2 chars) + 9-digit number
+    if (!UF_TO_DDDS[uf].includes(ddd)) {
+      console.error(`DDD FAIL: UF=${uf}, DDD=${ddd} not in [${UF_TO_DDDS[uf]}]`)
+      failures++
+    }
+  }
+}
+console.log(`DDD: ${dddTestUfs.length * 50} generated, ${failures} total failures so far`)
+
 if (failures > 0) {
   console.error(`\n${failures} TOTAL FAILURES`)
   process.exit(1)
 }
-console.log('\nAll CPF + PIS + Título checks PASSED')
+console.log('\nAll CPF + PIS + Título + DDD checks PASSED')
