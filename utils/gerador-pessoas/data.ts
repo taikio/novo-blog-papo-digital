@@ -50,6 +50,22 @@ export const UF_TO_TITULO_CODE: Record<string, number> = {
   DF: 20, SE: 21, AM: 22, RO: 23, AC: 24, AP: 25, RR: 26, TO: 27,
 }
 
+/** Brazilian male first names (faker pt_BR does not filter by sex reliably) */
+export const MALE_FIRST_NAMES = [
+  'João', 'Pedro', 'Lucas', 'Gabriel', 'Rafael', 'Mateus', 'Gustavo', 'Felipe',
+  'Carlos', 'André', 'Marcos', 'Bruno', 'Eduardo', 'Rodrigo', 'Alexandre',
+  'Diego', 'Thiago', 'Fernando', 'Leonardo', 'Henrique', 'Vitor', 'Daniel',
+  'Luiz', 'Paulo', 'Roberto', 'Marcelo', 'Renato', 'Fábio', 'Sérgio', 'Caio',
+]
+
+/** Brazilian female first names (faker pt_BR does not filter by sex reliably) */
+export const FEMALE_FIRST_NAMES = [
+  'Ana', 'Maria', 'Julia', 'Beatriz', 'Fernanda', 'Camila', 'Amanda', 'Larissa',
+  'Mariana', 'Bruna', 'Letícia', 'Caroline', 'Priscila', 'Natália', 'Renata',
+  'Aline', 'Roberta', 'Claudia', 'Patricia', 'Sandra', 'Débora', 'Vanessa',
+  'Cristina', 'Juliana', 'Gabriela', 'Isabel', 'Luciana', 'Tatiane', 'Viviane', 'Célia',
+]
+
 /** Common Brazilian neighborhood name patterns for bairro generation */
 export const BAIRRO_PREFIXES = [
   'Centro', 'Vila', 'Jardim', 'Parque', 'Alto', 'Bela Vista',

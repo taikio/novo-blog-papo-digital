@@ -1,15 +1,18 @@
 import { fakerPT_BR as faker } from '@faker-js/faker'
-import { BAIRRO_PREFIXES } from './data'
+import { BAIRRO_PREFIXES, MALE_FIRST_NAMES, FEMALE_FIRST_NAMES } from './data'
+
+function pickRandom<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)]
+}
 
 export function getPersonName(sex: 'male' | 'female'): { first: string; last: string } {
-  return {
-    first: faker.person.firstName({ sex }),
-    last: faker.person.lastName(),
-  }
+  // faker pt_BR does not filter firstName by sex reliably; use curated lists instead
+  const first = sex === 'male' ? pickRandom(MALE_FIRST_NAMES) : pickRandom(FEMALE_FIRST_NAMES)
+  return { first, last: faker.person.lastName() }
 }
 
 export function getMotherName(): string {
-  return `${faker.person.firstName({ sex: 'female' })} ${faker.person.lastName()}`
+  return `${pickRandom(FEMALE_FIRST_NAMES)} ${faker.person.lastName()}`
 }
 
 export function getEmail(first: string, last: string): string {
