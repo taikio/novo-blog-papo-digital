@@ -1,5 +1,6 @@
 import { generateCPF } from '../utils/gerador-pessoas/cpf'
 import { generatePIS } from '../utils/gerador-pessoas/pis'
+import { generateTituloEleitor, validateTitulo } from '../utils/gerador-pessoas/titulo-eleitor'
 import { isValidCPF, isValidPIS } from '@brazilian-utils/brazilian-utils'
 import { UF_TO_CPF_REGION, UF_TO_DDDS } from '../utils/gerador-pessoas/data'
 
@@ -46,8 +47,35 @@ for (let i = 0; i < 1000; i++) {
 }
 console.log(`PIS: 1000 generated, ${failures} total failures so far`)
 
+// 4. Known test vectors — HARD GATE: verify all five at https://www.4devs.com.br/validador_titulo_de_eleitor
+const vectors: [string, boolean][] = [
+  ['123456780190', true],  // SP, standard
+  ['000000000115', true],  // SP, DV1 exception (remainder=0)
+  ['123456780498', true],  // RS
+  ['123456780292', true],  // MG, standard
+  ['000000000218', true],  // MG, DV1 exception (remainder=0)
+]
+for (const [titulo, expected] of vectors) {
+  const result = validateTitulo(titulo)
+  if (result !== expected) {
+    console.error(`Título vector FAIL: ${titulo} expected=${expected} got=${result}`)
+    failures++
+  }
+}
+console.log('Título known vectors: checked')
+
+// 5. Consistency check (generator and validator share the same rule — NOT a correctness proof)
+for (let i = 0; i < 1000; i++) {
+  const { raw } = generateTituloEleitor()
+  if (!validateTitulo(raw)) {
+    console.error(`Título round-trip FAIL: ${raw}`)
+    failures++
+  }
+}
+console.log(`Título: 1000 generated, ${failures} total failures so far`)
+
 if (failures > 0) {
   console.error(`\n${failures} TOTAL FAILURES`)
   process.exit(1)
 }
-console.log('\nAll CPF + PIS checks PASSED')
+console.log('\nAll CPF + PIS + Título checks PASSED')
